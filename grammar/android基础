@@ -1,0 +1,20 @@
+Android基本架构(四大组件)
+	Activity:活动，Android程序的门面，应用中能看到的都放在活动中
+	Service:服务，后台运行的东西(即便应用退出)
+	BroadcastReceiver:广播接收器，应用接收或发送广播消息(电话，短信)
+	ContentProvider:内容提供器，应用程序之间共享数据
+
+Android程序设计：逻辑和视图分离
+	在布局文件(layout)中编写界面+在活动中引入进来(活动中不要直接编写界面)
+
+日志工具
+	android.util.Log
+	级别：
+		verbose:不论用哪个方法打印都能显示
+		debug
+		info
+		warn
+		error
+
+项目运行快捷键
+	control+R

@@ -1,0 +1,25 @@
+无论是ViewModel还是LiveData
+	主要在说的就是MVVM模型->model-view-viewModel
+
+ViewModel
+Android框架可能会决定销毁或重新创建界面控制器，以响应完全不受您控制的某些用户操作或设备事件
+
+产生原因:
+	Activity/Fragment之类的界面控制器主要用于:显示界面数据，对用户操作做出响应或处理操作系统通信(eg:权限请求)，如果再要求界面控制器负责从数据库或网络加载数据，会使类膨胀(单个类尝试自己处理应用的所有工作，而不是将工作委托给其他类，增加了测试的难度)
+	
+ViewModel实际所干的事情:
+	从界面控制器逻辑中分离出"视图数据所有权"
+
+ViewModel辅助程序类:
+	该类负责为界面准备数据，在配置更改期间会自动保留ViewModel对象，以便存储的数据立刻供下一个Activity或Fragment实例使用
+	也就是说将数据存储在ViewModel中，供下一个Activity共享->相当于ViewModel就是界面中数据的容器，允许在设备的配置发生变更(屏幕旋转)时继续保持
+
+ViewModel生命周期:
+	ViewModel跟随Activity创建后就一直在内存中生存且工作，直到与其关联的Activity销毁destroy时，会触发onCleared(ViewModel的生命周期函数)宣布死亡
+	还依赖于Lifecycles通过对Activity生命周期的捕获来触发生命周期事件的上报来达到监控生命周期的目的	
+
+ViewModel好处:
+	开发者不需要担心Activity/Fragment的相关状态数据持久化的问题，避免缓存恢复数据(模板化的操作)
+
+ViewModel的使用
+	1.使用ViewModelProviders工具类创建ViewModel

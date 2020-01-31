@@ -1,0 +1,33 @@
+不太需要关注
+	.gradle,.idea：自动生成的文件
+	build：(app中也存在一个)编译时自动生成的文件
+	gradle：gradle wrapper的配置文件
+
+.gitignore：将hiding的目录或文件排除在版本控制外
+build.gradle：项目全局的gradle构建脚本(不太修改)
+gredlew/gredlew.bat：Linux,Mac/Windows
+项目名.iml：标识项目用的
+local.properties：本机SDK路径
+settings.gradle：项目引入的所有模块
+gradle.properties：全局的gradle配置文件
+
+基本上所有的逻辑/操作/修改都是在app中，其他的都是系统自动生成的，一般不需要修改
+	build：编译时自动生成的文件，不需要修改
+
+	****important****
+	libs:第三方jar包存放处
+	src:
+		androidTest:自动化测试用例
+		**main**
+			java:Java/Kotlin代码存放处
+			res：系统资源(图片、布局、字符串等资源)
+				drawable-：存放图片
+				mipmap-：应用图标
+				values-：字符串相关信息(样式颜色)
+				layout：布局文件
+			AndroidMainifest:Android项目的配置文件(四大组件/权限声明...)
+		test:单元测试用例
+		build.gradle:当前模块的果然掉了构建脚本(配置相关文件)
+
+		app.iml/.gitignore:与外部相同没啥卵用
+		proguard-rules.pro:不希望被破解，混淆代码

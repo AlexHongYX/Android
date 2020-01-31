@@ -1,0 +1,134 @@
+所有控件共有属性
+	android:id="@+id/id_name"
+	android:layout_width
+	android:layout_height
+		match_parent:当前控件大小==父布局大小(父布局决定当前控件大小)
+		wrap_content:当前控件大小刚好包含住里面的内容(控件内容决定当前控件大小)
+	一般来讲，width设置为match_parent,height设置为wrap_content
+
+常用控件
+	TextView
+		文字位置gravity:top/bottom/left/right/center
+		字体颜色textSize,textColor
+
+	Button
+		textAllCaps="false":Button中的所有英文字母自动进行大写转换，采用该属性设置将自动大写转换取消
+
+	EditText
+		控件里输入和编辑内容(输入框/编辑框)
+		底面提示信息:hint
+		最大行数(再输入就会出现滚动条，而不是继续增大高度):maxLines
+		一般将EditText与Button结合使用
+
+	ImageView
+		控件中展示图片
+		src:引入图片，图片一般放在drawable目录下
+		程序中采用setImageXX()修改imageView相关属性
+
+	ProgressBar
+		界面上的进度条
+		visibility:控件的可见性(visible,invisible<不可见但仍占位置，透明了>,gone<不可见且不占任何屏幕空间>)/visibility(View.XXX)
+		style设置进度条的样式
+
+	代码层面：
+		AlertDialog
+			弹出对话框，置顶与所有界面元素之上，屏蔽其他控件的交互能力(用于重要内容或警告信息)
+			直接在代码层面创建对话框，并配置其标题，内容，可否用Back键关闭对话框，确认点击，取消点击等属性
+		ProgressDialog
+			弹出对话框，显示进度条，已被弃用
+
+基本布局
+	布局是一种可用于放置很多控件的容器，除了控件还可以放置布局(布局嵌套)
+	1.LinearLayout:线性布局
+		布局层面:
+			android:orientation->设置当前布局的排列方式,vertical(垂直),horizontal(水平)
+				采用垂直布局->控件就不能将height设置为match_parent->其他控件还怎么放
+				采用水平布局->控件就不能将width设置为match_parent->同理
+		控件层面:
+			android:layout_gravity:当前控件在布局中的对齐方式(位置)
+				与android:gravity(文字在控件中的对齐方式)不同
+				布局的排列方式不同，作用效果不同，如果水平排列，则只能是相对垂直方向的位置；如果是垂直排列，则只能是相对水平方向的位置
+			android:layout_weight:通过设置控件的该属性可以实现按比例排列
+				如果是水平布局->将两个控件的宽度设置为0dp，然后设置两个控件的weight属性，可以实现两个控件在水平方向上按比例水平分布
+				如果是垂直分布->将两个控件的高度设置为0dp，然后设置两个控件的weight属性，可以实现两个控件在垂直方向上按比例分布
+				还可以设置一个控件的width为wrap_content，另一个设置weight设置为1，则可以实现第一个控件按内部大小实现，而剩余部分都是第二个控件
+	2.RelativeLayout:相对布局
+		控件相对于布局的位置
+			layout_alignParentXXX
+		控件相对于控件的位置
+			layout_toXXXOf:左右
+			layout_above/below:上下
+	3.FrameLayout:帧布局
+		所有的控件默认摆放在布局的左上角，后添加的控件会压在之前的控件上
+		也可以通过layout_gravity设置控件的位置
+	4.ConstraintLayout:约束布局->https://juejin.im/post/5bac92f2f265da0aba70c1bf#heading-17	
+		可以按照比例约束控件位置和尺寸(更好的适配屏幕大小不同的机型)
+		文本对齐:通过baselineof设置不同控件的文本对齐
+		边距:使用margin时必须设置当前控件在布局里的约束
+		偏移:先居中再偏移
+		大小设置:0dp+约束 -代替-> match_parent
+		总结:其实就是相对布局的增强，需要时查看文档就行了
+
+ListView(只支持纵向滚动)
+	采取默认的适配器
+		数组的数据不能直接传给ListView，需要借助"适配器"完成
+		适配器:Adapter
+			通过泛型指定适配的数据类型
+			构造方法:当前上下文，ListView子项的布局(也就是每一行的布局)的id，每一行的数据
+		使用setAdapter()将创建好的适配器传入当前ListView(ListView与数据之间的关联)
+	**定制ListView界面(自定义适配器及适配类型)
+		定义适配类型，每一个子项作为一个类(包含子项的属性)
+		定义子项的自定义布局
+		自定义适配器，继承ArrayAdapter<适配类型>，获取子项布局的id属性并覆写getView()
+			getView()->当每个子项被滚动到屏幕内时会被调用
+				屏幕会根据position(参数)获取当前项的实例，
+				使用Layout...获取当前项的View视图
+				使用当前项的实例相关属性来渲染View视图即可
+		视图只是样式，由View决定即可；而内容是由实例对象决定(类似于css与js的关系)
+	提升ListView的运行效率
+		第一次缓存:getView()的参数convertView会将之前加载好的布局进行缓存(可重用)，因此在调用getView()前先判断convertView是否为null
+		第二次缓存:减少每次都通过findViewById()方法来获取控件实例，采用ViewHolder用于对控件实例进行缓存，将view的tag设置为ViewHolder对象即可
+	点击事件
+		setOnItemClickListener注册监听器(通过position获取当前对象)
+
+RecyclerView(纵向、横向、瀑布流滚动)——推荐使用
+	实现步骤：
+		1.添加RecyclerView依赖
+		2.在xml文件中添加RecyclerView控件
+		3.创建RecyclerView的Adapter(自定义适配器)
+			①创建RecyclerView.Adapter类的子类(自定义适配器)，泛型传入RecyclerView.ViewHolder类
+			②创建RecyclerView.ViewHolder类的子类(当前适配器的内部类)
+			③在RecyclerView.ViewHolder的子类(内部类)中初始化item的控件
+			④重写RecyclerView.Adapter类的相关方法
+		4.将适配器设置给RecyclerView
+	好处：RecyclerView将布局排列的工作交给了LayoutManager，而不需要自己设计(ListView)，而LayoutManager中制定了一套可扩展的布局排列接口，子类按照接口规范实现即可
+		LinearLayoutManager:线性布局->纵向/横向
+		GridLayoutManager:网格布局
+		StaggeredGridLayoutManager:瀑布流布局
+	点击事件
+		不注册子项的点击事件(点击事件可能是子项里具体的某一个按钮)，所有的点击事件都是由具体的View去注册(在View中注册点击事件)
+			在ViewHolder中添加当前View属性，可以通过ViewHolder操作当前View设置对应的点击事件
+		RecyclerView实现了子项中任意控件(子项整体)或布局的点击事件(也就是说:点击事件是基于View的整体或部分的，RecyclerView只需要引用View即可->实现简单，逻辑清晰)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

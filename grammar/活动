@@ -1,0 +1,137 @@
+活动创建
+	活动是一种可以包含用户界面的组件，主要用于与用户进行交互
+
+	唯一标识
+		在XML文件中定义一个id:@+id/id_name
+		在XML文件中引用别的id:@id/id_name
+	宽高
+		match_parent:与父元素一样宽
+		wrap_content:高刚好包含里面的内容
+
+	布局引入
+		由于活动与布局是分离的，因此在活动中采用setContentView(布局的id)给当前活动加载一个布局(放在layout中)
+			R.layout.布局文件名
+
+	活动注册
+		Android的四大组件都需要在AndroidMainfest中进行注册，活动的注册声明要放在<application>标签内(通过<activity>标签)
+
+	为活动配置为主程序
+		<activity>中加入<intent-filter>，添加标准的两句声明即可
+
+	设置活动标题栏的内容
+		在<activity>中添加一个属性(android:label)->设置标题栏(显示在活动最顶部)	
+		如果当前活动是主活动，改标题还会成为启动器中应用程序显示名称
+
+	R文件相当于是一个映射的集合(各种资源与其标识符的映射)
+		对于文件层面，R相当于就是res文件夹(资源全在res中)，调用某个文件就是(R.文件夹名.文件名)
+		对于文件中的某个资源(Button/text)，使用id标识(设置id_name)，调用就是(R.id.id_name)
+
+		所有资源的id都在R文件的映射库中存放，因此注意id的唯一性
+
+创建一个活动：
+	1.创建一个布局
+	2.创建一个活动
+	3.在AndroidMainfest.xml中进行活动注册
+	4.在活动中引入布局(3，4顺序无所谓)->通过R映射文件
+	5.设置/配置活动内容
+
+活动中
+	Toast：弹窗(一种提醒方式)，显示一段时间后自动消失(注意设置弹窗出发点)
+		1.获取Button对象(setContentView(id)+向下转型)
+		2.设置Button对象的点击事件
+		操作同js
+	Menu：右上角菜单框
+
+销毁活动
+	在活动中调用finish()
+
+*活动之间交互(Intent)
+	Intent:指名当前组件想要执行的动作/在不同组件之间传递数据
+		一般用于启动活动/服务，发送广播等场景
+	Intent(显式，隐式)
+		显示：直接在当前活动设置Intent对象，调用目标活动
+			Intent(this,XXX::class.java)
+			startActivity(intent)
+		隐式：在AndroidMainifest中设置目标Activity的action和category+在当前活动中使用Intent(action名)，可以设置Intent对象的category(addCategory)
+			配置文件中要想配置category，必须先配置默认的category(任意category都可响应)->"android.intent.category.DEFAULT"
+			Intent若没有设置category，默认会加上默认的category
+	**Intent传递数据
+		向下一个活动传递数据：当前活动intent.putExtra(key,value)->下一个活动intent.getXXXExtra(key)
+		返回数据给上一个活动：上一个活动startActivityForResult(Intent,请求码<判断数据来源>)->当前活动intent.putExtra(),setResult(RESULT_OK,intent)
+				->某事件返回：上一个活动覆写onActivityResult(requestCode<请求码>,resultCode<当前页面返回的值>，intent)中获取返回值
+				->Back返回：上一个活动覆写onBackPressed()中获取返回值
+
+	点击打开网页
+		显示创建Intent对象，传入参数Intent.ACTION_VIEW
+		设置Intent对象的data属性为Uri对象(Uri.parse("www.baidu.com"))
+		启动该Intent对象
+	点击自动拨号(设置默认号码)
+
+*活动的生命周期
+	返回栈：Android活动的覆盖就形成一个栈
+	活动状态：
+		1.运行状态：栈顶活动
+		2.暂停状态：不在栈顶，但依然可见(部分区域，没有占满，类似于分屏)
+		3.停止状态：不在栈顶且完全不可见(有可能会被回收)
+		4.销毁状态：从栈中移除(会被回收)
+	活动生存期
+		1.onCreate():第一次被创建时调用，用于初始化操作
+		2.onStart():活动每次由不可见变为可见时调用
+		3.onResume():活动准备好与用户进行交互时调用(活动位于栈顶且处于运行状态)
+		4.onPause():系统准备启动或恢复另一个活动时调用(释放CPU资源，保存关键数据)
+		5.onStop():活动完全不可见(完全被挡住看不见)时使用，若新活动是一个对话框式的活动会执行onPause()而不是onStop()
+		6.onDestroy():活动被销毁前调用，用于释放资源
+		7.onRestart():活动由停止状态->运行状态前调用，活动被重新启动
+		两两相对的生存期
+			完整生存期：onCreate()->onDestroy()，初始化/销毁操作
+			可见生存期：onStart()->onStop()，管理可见资源
+			前台生存期：onResume()->onPause()，活动与用户进行交互
+		8.onSaveInstanceState():若活动在停止状态时被系统回收了，携带一个Bundle类型的参数(该类型提供参数保存数据)保存了临时代码
+			数据恢复：在onCreate()中本身就有一个Bundle对象(类似于Intent的操作->就是key-value的格式)
+
+活动的启动模式
+	四种启动模式：standard,singleTop,singleTask,singleInstance。
+		通过AndroidManifest中通过<activity>标签指定Android:launchMode属性选择启动模式
+	standard:系统不会在乎这个活动是否已经在返回栈中存在，每次启动都会创建该活动的一个新的实例进行入栈操作(处于栈顶位置)
+		也就是说，同一个活动被多次调用，每次都会创建新的对象的(即便这个活动本身就在栈顶，也会新创建一个对象的)->相当于又是一个页面被创建出来了
+	singleTop:启动活动时如果返回栈的栈顶已是该活动，则直接使用处于栈顶的该活动，无需创建新的活动实例
+		只有当前活动时栈顶时再调用该活动就会直接使用该活动，而若当前活动没在栈顶，再启动活动照样会创建新的活动
+	singleTask:启动活动时在返回栈中检查是否存在该活动实例，如果已存在，则将这个活动以上的所有活动都出栈，如果不存在，则创建新的实例入栈
+	singleInstance:直接返回一个新的返回栈，使用一个单独的返回栈管理该活动，无论哪个应用访问这个活动，都共用同一个返回栈
+		主要应用在共享活动实例的问题
+
+技巧
+	知晓当前在哪一个活动:设置一个所有Activity的公共父类(该类继承了AppCompatActivity，其他类继承该父类就行)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

@@ -1,0 +1,90 @@
+数据持久化:
+	将内存中的瞬时数据保存在存储设备中，即使在手机或电脑关机的情况下，这些数据也不会丢失。
+	所谓持久化技术就是让数据在瞬时状态(保存在内存中)和持久状态(保存在存储设备中)之间的转换
+	Android持久化技术:文件存储，SharedPreferences，数据库存储
+
+文件存储:
+	不对存储的内容进行任何格式化处理，所有数据原封不动的保存在文件中，适合存储简单文本数据或二进制数据。
+	写数据到文件:
+		①Android中Context类中的openFileOutput()相当于是创建了一个FileOutputStream对象(对应Kotlin，Kotlin和Java操作一样)
+			该方法两个参数:
+				文件名(不包含路径)，默认存储在data/data/<packagenames>/files/ ->Android Studio右下角的Device File Explorer可以直接查看
+				文件操作模式，Context.MODE_PRIVATE(覆盖)，Context.MODE_APPEND(追加)
+		②实际写操作还是Java那一套(Kotlin异常体系和Java差不多，但没有受查异常)
+	从文件中读数据:
+		①Context类的openFileInput()相当于创建FileInoutStream对象
+			只要一个参数:
+				文件名(不包含路径)
+		②同样，读操作，异常体系都是Java那一套
+
+SharedPreferences存储:
+	使用键值对的方式进行存储，使用xml格式对数据进行管理
+	无论是写数据还是读数据都需要先得到SharedPreferences对象:
+		①Context类的getSharedPreferences(文件名,MODE_PRIVATE)->操作模式只能选MODE_PRIVATE,表示只有当前应用程序才能对该SharedPreferences文件操作
+		②Activity类的getPreferences(操作模式参数)->文件名默认为当前活动的类名
+		③PreferencesManager类的getDefaultSharedPreferences(Context)->文件名为当前应用程序的包名的前缀(被弃用了)
+	写数据到SharedPreferences:
+		①获取SharedPreferences.Editor对象->edit()
+		②向Editor对象添加数据->editor.putXXX(key,value<XXX类型的>)
+		③数据提交->editor.apply()
+	从SharedPreferences中读数据:	
+		getXXX(key,默认值)->若当前	SharedPreferences文件不存在key则返回默认值
+	清除所有数据:
+		editor.clear()->editor.apply()
+
+SQLite数据库存储
+	创建或更新数据库
+		①自定义实现SQLLiteOpenHelper抽象类中的onCreate()和onUpgrade()
+			onCreate()只有在第一次创建数据库时才会调用->创建
+			onUpgrade()在非第一次创建数据库时会调用->更新
+		②该自定义类构造函数参数有四个:Context，数据库名，自定义Cursor(一般为null)，版本号
+		③外部调用
+			dpHelper.getWriteableDatabase()/getReadableDatabase()->返回一个可对数据库进行读写操作的对象
+			区别:数据库不可写入时，getRead...以只读方式打开数据库，getWrite...出现异常
+		④具体执行
+			db(onCreate()/onUpgrade()的参数).execSQL(SQL语句)
+	SQL数据类型
+		integer:整型
+		real:浮点型
+		text:文本类型
+		blob:二进制类型
+		autoincrement:自增
+	CRUD
+		无论是增删改查都有两种方式->1.基于AndroidAPI的一堆方法 2.类似JDBC
+		目前采用类似JDBC的方法，1到时用再学
+			Create:增
+			Retrieve:查->除了查使用db.rawQuery()，其他都使用execSQL()->返回Cursor对象，遍历Cursor对象即可
+			Update:改
+			Delete:删
+		查询标准格式:
+			// 返回Cursor对象
+            val cursor:Cursor = sqLiteDatabase.rawQuery("select * from Book",null)
+            // 遍历Cursor对象，取出数据并打印
+            if (cursor.moveToFirst()){
+                do{
+                    val name = cursor.getString(cursor.getColumnIndex("name"))
+                    val author = cursor.getString(cursor.getColumnIndex("author"))
+                    val pages = cursor.getInt(cursor.getColumnIndex("pages"))
+                    val price = cursor.getDouble(cursor.getColumnIndex("price"))
+                    Log.d("MainActivity","name:$name,author:$author,pages:$pages,price:$price")
+                }while (cursor.moveToNext())
+            }
+            cursor.close()
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
