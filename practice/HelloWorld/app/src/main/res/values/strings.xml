@@ -1,0 +1,5 @@
+<!--代码中通过R.string.app_name调用-->
+<!--XML文件中通过@string/app_name调用-->
+<resources>
+    <string name="app_name">HelloWorld</string>
+</resources>
