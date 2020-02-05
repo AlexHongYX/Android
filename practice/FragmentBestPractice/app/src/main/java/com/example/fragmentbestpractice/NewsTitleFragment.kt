@@ -1,6 +1,7 @@
 package com.example.fragmentbestpractice
 
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -15,8 +16,6 @@ class NewsTitleFragment: Fragment(){
 
     // 是否采取双页
     var isTwoPane = false
-
-
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -60,11 +59,11 @@ class NewsTitleFragment: Fragment(){
     }
 
     // RecycleView展示
-    class NewsAdapter(newsList:List<News>): RecyclerView.Adapter<NewsAdapter.ViewHolder>(){
+    inner class NewsAdapter(newsList:List<News>): RecyclerView.Adapter<NewsAdapter.ViewHolder>(){
 
         private val mNewsList = newsList
 
-        class ViewHolder(view:View): RecyclerView.ViewHolder(view){
+        inner class ViewHolder(view:View): RecyclerView.ViewHolder(view){
             val newsTitleText:TextView = view.findViewById(R.id.news_title)
         }
 
@@ -74,12 +73,17 @@ class NewsTitleFragment: Fragment(){
 
             view.setOnClickListener{
                 val news = mNewsList[holder.adapterPosition]
-                if (Outt.isTwoPane){
-                    val newsContentFragment:NewsContentFragment =
+                if (isTwoPane){
+                    // 如果是双页模式，则刷新NewsContentFragment中的内容
+                    val newsContentFragment:NewsContentFragment = fragmentManager
+                        ?.findFragmentById(R.id.news_content_fragment) as NewsContentFragment
+                    newsContentFragment.refresh(news.title,news.content)
                 }else{
-
+                    // 如果是单页模式，则直接启动NewsContentActivity
+                    NewsContentActivity.actionStart(activity,news.title,news.content)
                 }
             }
+            return holder
         }
 
         override fun getItemCount(): Int {

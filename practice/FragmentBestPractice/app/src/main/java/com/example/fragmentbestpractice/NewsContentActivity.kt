@@ -7,12 +7,16 @@ import android.os.Bundle
 
 class NewsContentActivity : AppCompatActivity() {
 
-    fun actionStart(context: Context,newsTitle: String,newsContent: String){
-        val intent = Intent(context,NewsContentFragment::class.java)
-        intent.putExtra("news_title",newsTitle)
-        intent.putExtra("news_content",newsContent)
-        context.startActivity(intent)
+    // 伴生域->静态域(声明)
+    companion object {
+        fun actionStart(context: Context?,newsTitle: String,newsContent: String){
+            val intent = Intent(context,NewsContentActivity::class.java)
+            intent.putExtra("news_title",newsTitle)
+            intent.putExtra("news_content",newsContent)
+            context?.startActivity(intent)
+        }
     }
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -23,7 +27,7 @@ class NewsContentActivity : AppCompatActivity() {
         val newsContent = intent.getStringExtra("news_content")
 
         val newsContentFragment:NewsContentFragment = supportFragmentManager
-            .findFragmentById(R.id.news_content) as NewsContentFragment
+            .findFragmentById(R.id.news_content_fragment) as NewsContentFragment
         newsContentFragment.refresh(newsTitle,newsContent)
     }
 }
