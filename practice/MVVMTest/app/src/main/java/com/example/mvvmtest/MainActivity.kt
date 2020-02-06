@@ -16,7 +16,7 @@ class MainActivity : AppCompatActivity() {
         val model = ViewModelProviders.of(this).get(MyViewModel::class.java)
         // 获取ViewModel中的LiveData，并添加观察者
         model.getUsersLiveData().observe(this, Observer {
-            // 更新UI界面
+            // 更新UI界面g
         })
     }
 }
