@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <RadioGroup
+        android:id="@+id/radioGroup"
+        android:layout_width="match_parent"
+        android:layout_height="56dp"
+        android:background="@color/bg_white"
+        android:orientation="horizontal">
+
+        <RadioButton
+            android:id="@+id/follow_btn"
+            style="@style/tab_menu_item"
+            android:text="Follow"/>
+        <RadioButton
+            android:id="@+id/popular_btn"
+            style="@style/tab_menu_item"
+            android:text="Popular"/>
+        <RadioButton
+            android:id="@+id/nearby_btn"
+            style="@style/tab_menu_item"
+            android:text="Nearby"/>
+    </RadioGroup>
+
+<!--    必须使用layout_below将ViewPager放在RadioGroup下面，否则按钮点击不了-->
+    <androidx.viewpager.widget.ViewPager
+        android:id="@+id/vPager"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@+id/radioGroup"/>
+</RelativeLayout>
