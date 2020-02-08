@@ -2,10 +2,8 @@ package com.example.myhelotest
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.util.Log
 import android.widget.RadioButton
 import android.widget.RadioGroup
-import android.widget.TextView
 import androidx.viewpager.widget.ViewPager
 
 class MainActivity : AppCompatActivity(),ViewPager.OnPageChangeListener {
@@ -33,7 +31,6 @@ class MainActivity : AppCompatActivity(),ViewPager.OnPageChangeListener {
         adapter = MyFragmentPagerAdapter(supportFragmentManager)
 
         bindViews()
-
         // 设置默认选择follow
         popularBtn?.isChecked = true
     }
@@ -50,7 +47,7 @@ class MainActivity : AppCompatActivity(),ViewPager.OnPageChangeListener {
         vPager = findViewById(R.id.vPager)
         // 设置ViewPager适配器
         vPager?.adapter = adapter
-        // 设置该vPage的初始选项->popular
+        // 设置该vPage的初始选项->follow
         vPager?.currentItem = 1
         // 设置当前activity监听ViewPager的变化
         vPager?.addOnPageChangeListener(this)
@@ -59,15 +56,12 @@ class MainActivity : AppCompatActivity(),ViewPager.OnPageChangeListener {
         radioGroup?.setOnCheckedChangeListener {
                 group, checkedId ->
                     // 根据ID修改vpager的显示页面
-                    Log.d("hehe","hello")
                     when(checkedId){
                         R.id.follow_btn->vPager?.currentItem = PAGE_ZERO
                         R.id.popular_btn->vPager?.currentItem = PAGE_ONE
                         R.id.nearby_btn->vPager?.currentItem = PAGE_TWO
                     }
-
         }
-
     }
 
     /**
@@ -76,7 +70,7 @@ class MainActivity : AppCompatActivity(),ViewPager.OnPageChangeListener {
      */
     override fun onPageScrollStateChanged(state: Int) {
         // start==2->页面滑动完毕
-        if (state === 2){
+        if (state == 2){
             // 判断当前的currentItem，根据currentItem判断当前是那个页面，转换到该页面的按钮上(回调按钮的点击事件)
             when(vPager?.currentItem){
                 PAGE_ZERO->followBtn?.isChecked = true

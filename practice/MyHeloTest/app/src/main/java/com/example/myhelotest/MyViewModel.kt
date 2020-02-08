@@ -8,17 +8,21 @@ import androidx.lifecycle.ViewModel
 class MyViewModel: ViewModel(){
 
     // 将RecycleView数据存储在LiveData中
-    private var fruitsLiveData:MutableLiveData<MutableList<Fruit>>? = null
+    private var fruitsLiveData:MutableLiveData<List<Fruit>>? = null
 
     /**
      * 获取LiveData->返回LiveData(不可修改)
      */
-    fun getFruitsLiveData():LiveData<MutableList<Fruit>>{
+    fun getFruitsLiveData():LiveData<List<Fruit>>{
         if(fruitsLiveData == null){
             fruitsLiveData = MutableLiveData()
             loadFruits()
         }
-        return fruitsLiveData as LiveData<MutableList<Fruit>>
+//        println("MyViewModel:"+ fruitsLiveData?.value)
+        val ret = fruitsLiveData as LiveData<List<Fruit>>
+//        println("MyViewModel:"+ret)
+
+        return ret
     }
 
     /**
@@ -26,7 +30,7 @@ class MyViewModel: ViewModel(){
      */
     private fun loadFruits(){
         val fruitList = initFruits()
-        fruitsLiveData?.postValue(fruitList)
+        fruitsLiveData?.value = fruitList
     }
 
     private fun initFruits(): MutableList<Fruit> {

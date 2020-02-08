@@ -1,5 +1,6 @@
 package com.example.myhelotest
 
+
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -11,28 +12,11 @@ import androidx.recyclerview.widget.RecyclerView
 /**
  * RecyclerView的适配器Adapter
  */
-class FruitAdapter(fruitList:List<Fruit>): RecyclerView.Adapter<FruitAdapter.ViewHolder>(){
-
-    /**
-     * 声明内部类用于缓存View->之后直接操作ViewHolder即可，无需反复调用findXXX操作
-     */
-    class ViewHolder(view:View):RecyclerView.ViewHolder(view){
-        val fruitImage:ImageView = view.findViewById(R.id.fruit_image)
-        val fruitName:TextView = view.findViewById(R.id.fruit_name)
-
-        val fruitView:View = view
-    }
-
-    // 声明数据集合
-    val mFruitList:List<Fruit> = fruitList
-
-    /**
-     * 创建holder实例
-     */
+class FruitAdapter2(fruitList:List<Fruit>): RecyclerView.Adapter<FruitAdapter2.ViewHolder>(){
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         // 获取View对象
         val view:View = LayoutInflater.from(parent.context)
-            .inflate(R.layout.fruit_item,parent,false)
+            .inflate(R.layout.fruit_item2,parent,false)
         // 创建holder对象
         val holder = ViewHolder(view)
         // 通过holder设置View对象中元素的点击事件
@@ -49,6 +33,20 @@ class FruitAdapter(fruitList:List<Fruit>): RecyclerView.Adapter<FruitAdapter.Vie
         return holder
     }
 
+
+    /**
+     * 声明内部类用于缓存View->之后直接操作ViewHolder即可，无需反复调用findXXX操作
+     */
+    class ViewHolder(view:View):RecyclerView.ViewHolder(view){
+        val fruitImage:ImageView = view.findViewById(R.id.fruit_image)
+        val fruitName:TextView = view.findViewById(R.id.fruit_name)
+
+        val fruitView:View = view
+    }
+
+    // 声明数据集合
+    val mFruitList:List<Fruit> = fruitList
+
     /**
      * 返回集合长度
      */
@@ -56,15 +54,11 @@ class FruitAdapter(fruitList:List<Fruit>): RecyclerView.Adapter<FruitAdapter.Vie
         return mFruitList.size
     }
 
-    /**
-     * 渲染当前元素
-     */
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         val fruit:Fruit = mFruitList[position]
         // 通过ViewHolder渲染当前元素
         holder.fruitImage.setImageResource(fruit.imageId)
         holder.fruitName.text = fruit.name
     }
-
 
 }
