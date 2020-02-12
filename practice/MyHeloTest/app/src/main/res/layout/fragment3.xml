@@ -3,12 +3,19 @@
     android:orientation="vertical" android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <TextView
-        android:id="@+id/txt_content"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:gravity="center"
-        android:text="NearBy"
-        android:textColor="@color/text_yellow"
-        android:textSize="20sp" />
+    <Button
+        android:id="@+id/mButton1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="update apple name in Follow"
+        android:textAllCaps="false"
+        android:textSize="20sp"/>
+
+    <Button
+        android:id="@+id/mButton2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="update banana image in Popular"
+        android:textAllCaps="false"
+        android:textSize="20sp"/>
 </LinearLayout>

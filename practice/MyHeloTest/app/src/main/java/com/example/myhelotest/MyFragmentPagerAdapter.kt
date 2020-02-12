@@ -5,37 +5,45 @@ import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.FragmentPagerAdapter
 
 
-class MyFragmentPagerAdapter(fm:FragmentManager): FragmentPagerAdapter(fm){
+class MyFragmentPagerAdapter(fm:FragmentManager,fragments:List<Fragment>,titles:List<String>)
+    : FragmentPagerAdapter(fm){
 
-//    private val fragmentList:MutableList<Fragment> = mutableListOf()
-//
-//    init {
-//        fragmentList.add(MyFragment1())
-//        fragmentList.add(MyFragment2())
-//        fragmentList.add(MyFragment3())
-//    }
-    private val myFragment1 = MyFragment1()
-    private val myFragment2 = MyFragment2()
-    private val myFragment3 = MyFragment3()
+    private val mFragments = fragments
+    private val mTitles = titles
 
-    override fun getItem(position: Int): Fragment? {
-        println("Adapter")
-        println("============")
-        var fragment: Fragment? = when(position){
-            MainActivity.PAGE_ZERO->
-                myFragment1
-            MainActivity.PAGE_ONE->
-                myFragment2
-            MainActivity.PAGE_TWO->
-                myFragment3
-            else->
-                null
-        }
-        return fragment
+    override fun getItem(position: Int): Fragment {
+        return mFragments[position]
     }
 
     override fun getCount(): Int {
-        return 3
+        return mFragments.size
     }
+
+    /**
+     * 设置ViewPager的标题
+     */
+    override fun getPageTitle(position: Int): CharSequence? {
+        return mTitles[position]
+    }
+
+    //    override fun getItem(position: Int): Fragment? {
+//        println("Adapter")
+//        println("============")
+//        var fragment: Fragment? = when(position){
+//            MainActivity.PAGE_ZERO->
+//                myFragment1
+//            MainActivity.PAGE_ONE->
+//                myFragment2
+//            MainActivity.PAGE_TWO->
+//                myFragment3
+//            else->
+//                null
+//        }
+//        return fragment
+//    }
+//
+//    override fun getCount(): Int {
+//        return 3
+//    }
 
 }

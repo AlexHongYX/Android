@@ -1,5 +1,6 @@
 package com.example.myhelotest
 
+import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -19,12 +20,10 @@ class FruitAdapter(fruitList:List<Fruit>): RecyclerView.Adapter<FruitAdapter.Vie
     class ViewHolder(view:View):RecyclerView.ViewHolder(view){
         val fruitImage:ImageView = view.findViewById(R.id.fruit_image)
         val fruitName:TextView = view.findViewById(R.id.fruit_name)
-
-        val fruitView:View = view
     }
 
     // 声明数据集合
-    val mFruitList:List<Fruit> = fruitList
+    var mFruitList:List<Fruit> = fruitList
 
     /**
      * 创建holder实例
@@ -57,7 +56,7 @@ class FruitAdapter(fruitList:List<Fruit>): RecyclerView.Adapter<FruitAdapter.Vie
     }
 
     /**
-     * 渲染当前元素
+     * 绑定当前元素
      */
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         val fruit:Fruit = mFruitList[position]
@@ -66,5 +65,17 @@ class FruitAdapter(fruitList:List<Fruit>): RecyclerView.Adapter<FruitAdapter.Vie
         holder.fruitName.text = fruit.name
     }
 
-
+    /**
+     * 配合DiffUtil使用进行定向局部更新
+     */
+    override fun onBindViewHolder(holder: ViewHolder, position: Int, payloads: MutableList<Any>) {
+        if (payloads.isEmpty()){
+            onBindViewHolder(holder,position)
+        }else{
+            val payload = payloads[0] as Bundle
+            // 遍历payload进行局部更新
+            // 只能改名字
+            holder.fruitName.text = payload.getString("KEY_NAME")
+        }
+    }
 }

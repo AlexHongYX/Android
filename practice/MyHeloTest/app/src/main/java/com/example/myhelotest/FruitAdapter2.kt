@@ -1,6 +1,7 @@
 package com.example.myhelotest
 
 
+import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -13,6 +14,18 @@ import androidx.recyclerview.widget.RecyclerView
  * RecyclerView的适配器Adapter
  */
 class FruitAdapter2(fruitList:List<Fruit>): RecyclerView.Adapter<FruitAdapter2.ViewHolder>(){
+
+    /**
+     * 声明内部类用于缓存View->之后直接操作ViewHolder即可，无需反复调用findXXX操作
+     */
+    class ViewHolder(view:View):RecyclerView.ViewHolder(view){
+        val fruitImage:ImageView = view.findViewById(R.id.fruit_image)
+        val fruitName:TextView = view.findViewById(R.id.fruit_name)
+    }
+
+    // 声明数据集合
+    var mFruitList:List<Fruit> = fruitList
+
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         // 获取View对象
         val view:View = LayoutInflater.from(parent.context)
@@ -33,20 +46,6 @@ class FruitAdapter2(fruitList:List<Fruit>): RecyclerView.Adapter<FruitAdapter2.V
         return holder
     }
 
-
-    /**
-     * 声明内部类用于缓存View->之后直接操作ViewHolder即可，无需反复调用findXXX操作
-     */
-    class ViewHolder(view:View):RecyclerView.ViewHolder(view){
-        val fruitImage:ImageView = view.findViewById(R.id.fruit_image)
-        val fruitName:TextView = view.findViewById(R.id.fruit_name)
-
-        val fruitView:View = view
-    }
-
-    // 声明数据集合
-    val mFruitList:List<Fruit> = fruitList
-
     /**
      * 返回集合长度
      */
@@ -61,4 +60,28 @@ class FruitAdapter2(fruitList:List<Fruit>): RecyclerView.Adapter<FruitAdapter2.V
         holder.fruitName.text = fruit.name
     }
 
+    override fun onBindViewHolder(holder: ViewHolder, position: Int, payloads: MutableList<Any>) {
+        if (payloads.isEmpty()){
+            onBindViewHolder(holder,position)
+        }else{
+            val payload = payloads[0] as Bundle
+            holder.fruitImage.setImageResource(payload.getInt("KEY_IMAGE"))
+        }
+    }
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
