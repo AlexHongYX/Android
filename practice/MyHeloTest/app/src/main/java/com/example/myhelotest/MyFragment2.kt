@@ -18,7 +18,7 @@ class MyFragment2: Fragment(){
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        val view = inflater.inflate(R.layout.fragment3,container,false)
+        val view = inflater.inflate(R.layout.fragment2,container,false)
         val button1: Button = view.findViewById(R.id.mButton1)
         // 获取数据集
         val model = activity?.let { it -> ViewModelProviders.of(it).get(MyViewModel::class.java) }

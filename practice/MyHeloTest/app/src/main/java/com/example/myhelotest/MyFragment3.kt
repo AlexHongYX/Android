@@ -18,10 +18,7 @@ class MyFragment3: Fragment(){
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-//        println("Fragment3")
-
-
-        val view = inflater.inflate(R.layout.fragment2,container,false)
+        val view = inflater.inflate(R.layout.fragment3,container,false)
         val recyclerView: RecyclerView = view.findViewById(R.id.recycler_view2)
 
         // 设置RecyclerView的布局->通过LinearLayoutManager->默认是垂直布局
@@ -48,7 +45,6 @@ class MyFragment3: Fragment(){
             mAdapter?.mFruitList = it
             mAdapter?.let { it1 -> diffResult?.dispatchUpdatesTo(it1) }
         })
-        println("Fragment2")
         return view
     }
 }

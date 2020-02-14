@@ -26,7 +26,7 @@ class FruitAdapter(fruitList:List<Fruit>): RecyclerView.Adapter<FruitAdapter.Vie
     var mFruitList:List<Fruit> = fruitList
 
     /**
-     * 创建holder实例
+     * 创建holder实例，可以通过该方法直接操作View对象中的元素，比如点击
      */
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         // 获取View对象
@@ -38,7 +38,7 @@ class FruitAdapter(fruitList:List<Fruit>): RecyclerView.Adapter<FruitAdapter.Vie
         holder.fruitName.setOnClickListener{
             val position = holder.adapterPosition
             val fruit = mFruitList[position]
-            Toast.makeText(it.context,"you clicked view "+fruit.name,Toast.LENGTH_SHORT).show()
+            Toast.makeText(it.context,"you clicked name "+fruit.name,Toast.LENGTH_SHORT).show()
         }
         holder.fruitImage.setOnClickListener{
             val position:Int = holder.adapterPosition

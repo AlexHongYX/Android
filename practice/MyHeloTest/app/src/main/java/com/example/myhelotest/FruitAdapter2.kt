@@ -36,7 +36,7 @@ class FruitAdapter2(fruitList:List<Fruit>): RecyclerView.Adapter<FruitAdapter2.V
         holder.fruitName.setOnClickListener{
             val position = holder.adapterPosition
             val fruit = mFruitList[position]
-            Toast.makeText(it.context,"you clicked view "+fruit.name,Toast.LENGTH_SHORT).show()
+            Toast.makeText(it.context,"you clicked name "+fruit.name,Toast.LENGTH_SHORT).show()
         }
         holder.fruitImage.setOnClickListener{
             val position:Int = holder.adapterPosition
