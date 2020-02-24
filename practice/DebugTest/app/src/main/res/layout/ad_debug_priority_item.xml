@@ -1,0 +1,26 @@
+<FrameLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/item"
+    android:layout_width="match_parent"
+    android:layout_height="60dp"
+    android:paddingLeft="20dp"
+    android:clickable="true"
+    android:focusable="true"
+    android:foreground="?selectableItemBackground">
+
+    <com.ss.android.uilib.base.SSTextView
+        android:id="@+id/text"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_vertical"
+        android:textAppearance="?android:attr/textAppearanceMedium" />
+
+    <com.ss.android.iconfont.IconFontImageView
+        style="@style/FontIcon.EditDrag"
+        android:id="@+id/drag_view"
+        android:layout_width="60dp"
+        android:layout_height="match_parent"
+        android:layout_gravity="center_vertical|end"
+        tools:background="#f00"/>
+</FrameLayout>

@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:orientation="horizontal"
+    android:layout_width="match_parent"
+    android:paddingLeft="30dp"
+    android:paddingRight="30dp"
+    android:layout_height="50dp"
+    tools:background="#ff0">
+    <com.ss.android.uilib.base.SSTextView
+        android:id="@+id/text"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:textColor="@color/common_s6"
+        android:gravity="center_vertical"
+        tools:text="this is the demo text"/>
+
+    <com.ss.android.iconfont.IconFontImageView
+        style="@style/FontIcon.ArrowRight"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true"
+        android:layout_centerVertical="true"
+        android:layout_width="24dp"
+        android:layout_height="24dp"
+        tools:background="#f00"/>
+</RelativeLayout>

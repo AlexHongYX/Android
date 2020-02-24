@@ -1,0 +1,182 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_height="match_parent">
+    <LinearLayout android:orientation="vertical"
+                  android:layout_width="match_parent"
+                  android:layout_height="wrap_content">
+        <Button
+            android:id="@+id/send_btn"
+            android:text="Send GCM"
+            android:textSize="25sp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            tools:ignore="HardcodedText" />
+        <CheckBox
+            android:id="@+id/debug_gcm_has_image"
+            android:text="Has Image"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            tools:ignore="HardcodedText" />
+        <CheckBox
+            android:id="@+id/debug_gcm_show_large_image"
+            android:text="Show Large Image"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            tools:ignore="HardcodedText" />
+        <CheckBox
+            android:id="@+id/debug_gcm_new_style"
+            android:text="New Style"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            tools:ignore="HardcodedText" />
+        <CheckBox
+            android:id="@+id/debug_gcm_has_title"
+            android:text="Has Title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            tools:ignore="HardcodedText" />
+        <CheckBox
+            android:id="@+id/debug_dark_theme"
+            android:text="Dark Theme"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            tools:ignore="HardcodedText" />
+        <CheckBox
+            android:id="@+id/show_video_type"
+            android:text="Show Video Type"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            tools:ignore="HardcodedText" />
+        <CheckBox
+            android:id="@+id/show_right_button"
+            android:text="Show Right Button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            tools:ignore="HardcodedText" />
+        <CheckBox
+            android:id="@+id/enable_delay_show"
+            android:text="Enable Delay Show"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            tools:ignore="HardcodedText" />
+        <CheckBox
+            android:id="@+id/interactive_push"
+            android:text="Interactive Push"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            tools:ignore="HardcodedText" />
+        <CheckBox
+            android:id="@+id/debug_show_payload"
+            android:text="Debug Show Payload"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            tools:ignore="HardcodedText" />
+        <CheckBox
+            android:id="@+id/show_floating_window"
+            android:text="Show Floating Window"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            tools:ignore="HardcodedText" />
+        <CheckBox
+            android:id="@+id/show_lock_screen"
+            android:text="Show Lock Screen"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            tools:ignore="HardcodedText" />
+        <CheckBox
+            android:id="@+id/disable_push_filter"
+            android:text="Disable Push Filter"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            tools:ignore="HardcodedText" />
+        <CheckBox
+            android:id="@+id/disable_multi_reach_filter"
+            android:text="Disable Multi Reach Filter"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            tools:ignore="HardcodedText" />
+        <EditText
+            android:id="@+id/debug_max_line"
+            android:hint="Max line"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            tools:ignore="HardcodedText" />
+        <com.ss.android.uilib.base.SSTextView
+            android:text="FCM token"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            tools:ignore="HardcodedText" />
+
+        <com.ss.android.uilib.base.SSTextView
+            android:id="@+id/debug_fcm_token"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:gravity="center_vertical"
+            >
+
+            <EditText
+                android:id="@+id/local_pull_interval_edt"
+                android:hint="Interval/s"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:maxLines="1"
+                android:inputType="number"
+                tools:ignore="HardcodedText"
+                />
+            <Button
+                android:id="@+id/send_local_pull_btn"
+                android:text="Send LocalPush"
+                android:textSize="20sp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                tools:ignore="HardcodedText"
+                />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:gravity="center_vertical"
+            >
+
+            <EditText
+                android:id="@+id/local_pull_debug_divisor_edt"
+                android:hint="Divisor"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:maxLines="1"
+                android:inputType="number"
+                tools:ignore="HardcodedText"
+                />
+            <Button
+                android:id="@+id/set_local_push_debug_divisor"
+                android:text="Set Divisor"
+                android:textSize="20sp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                tools:ignore="HardcodedText"
+                />
+        </LinearLayout>
+
+        <Button
+            android:id="@+id/debug_sp_migrate"
+            android:text="DEBUG SP MIGRATE"
+            android:textSize="20sp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            tools:ignore="HardcodedText"
+            />
+
+    </LinearLayout>
+</ScrollView>
+

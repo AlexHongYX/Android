@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+            xmlns:tools="http://schemas.android.com/tools"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:focusable="true"
+        android:focusableInTouchMode="true"
+        android:orientation="vertical"
+        >
+        <!--Settings-->
+        <EditText
+            android:id="@+id/retryIntervalSetEt"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:hint="set fail retry interval / min"
+            />
+
+        <EditText
+            android:id="@+id/waitIntervalSetEt"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:hint="set wait retry interval / min"
+            />
+
+        <Button
+            android:id="@+id/saveSettingsBt"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Save Settings"
+            />
+
+        <TextView
+            android:id="@+id/settingsText"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"/>
+
+        <!--Dumps System Info-->
+        <Button
+            android:id="@+id/dumpsSystemBt"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Dumps System Info"
+            />
+
+        <TextView
+            android:id="@+id/dumpsSystemText"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            tools:text="Dumps System Info"
+            />
+
+        <!--Dumps Graph-->
+        <Button
+            android:id="@+id/dumpsGraphBt"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Dumps Graph"
+            />
+
+        <TextView
+            android:id="@+id/dumpsGraphText"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            tools:text="Dumps System Info"
+            />
+
+    </LinearLayout>
+
+</ScrollView>
+
+
