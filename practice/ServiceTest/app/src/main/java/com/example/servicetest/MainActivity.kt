@@ -7,6 +7,7 @@ import android.content.ServiceConnection
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.os.IBinder
+import android.util.Log
 import android.widget.Button
 
 class MainActivity : AppCompatActivity() {
@@ -55,6 +56,15 @@ class MainActivity : AppCompatActivity() {
             val stopIntent = Intent(this,MyService::class.java)
             // 停止服务
             stopService(stopIntent)
+        }
+
+
+        val  intentServiceButton:Button = findViewById(R.id.intent_service)
+        intentServiceButton.setOnClickListener {
+            // 打印主线程ID
+            Log.d("MainActivity:","Thread id is "+Thread.currentThread().id)
+            val intentService = Intent(this,MyIntentService::class.java)
+            startService(intentService)
         }
     }
 }

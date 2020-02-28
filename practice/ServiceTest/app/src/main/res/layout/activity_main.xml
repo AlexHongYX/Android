@@ -5,10 +5,10 @@
     android:layout_height="match_parent">
 
     <Button
-    android:id="@+id/start_service"
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:text="Start Service"/>
+        android:id="@+id/start_service"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Start Service"/>
     <Button
         android:id="@+id/stop_service"
         android:layout_width="match_parent"
@@ -25,4 +25,11 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="Unbind Service"/>
+
+<!--    测试IntentService-->
+    <Button
+        android:id="@+id/intent_service"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Intent Service"/>
 </LinearLayout>
