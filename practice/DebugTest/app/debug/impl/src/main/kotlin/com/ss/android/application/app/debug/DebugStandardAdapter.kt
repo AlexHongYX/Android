@@ -1,7 +1,9 @@
 package com.ss.android.application.app.debug
 
 import android.content.Context
+import android.os.Debug
 import android.text.TextUtils
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -18,8 +20,6 @@ import java.util.*
  * 4种不同的类型对应4种ViewHolder
  */
 abstract class ViewHolder(view: View): RecyclerView.ViewHolder(view){
-    @JvmField
-    val mContext = view.context
 
     // 当设置mData值在子类中进行使用
     var mItems:DebugDataModel? = null
@@ -37,7 +37,6 @@ abstract class ViewHolder(view: View): RecyclerView.ViewHolder(view){
                 ViewType.EditText-> EditTextViewHolder(view)
                 ViewType.CheckBox-> CheckBoxViewHolder(view)
                 ViewType.TextView-> TextViewViewHolder(view)
-                ViewType.Separator-> SeparatorViewHolder(view)
                 ViewType.Spinner-> SpinnerViewHolder(view)
             }
         }
@@ -51,9 +50,12 @@ abstract class ViewHolder(view: View): RecyclerView.ViewHolder(view){
 class EditTextViewHolder(view: View) : ViewHolder(view) {
 
     @JvmField
+    val mContext: Context= view.context
+    @JvmField
     val mEditText: AppCompatEditText = view.findViewById(R.id.debug_edit_text)
     @JvmField
     val mTestButton: Button = view.findViewById(R.id.debug_btn)
+
 
     override fun onItemSet() {
         mEditText.hint = mItems?.text
@@ -75,7 +77,13 @@ class EditTextViewHolder(view: View) : ViewHolder(view) {
 class CheckBoxViewHolder(view: View): ViewHolder(view){
 
     @JvmField
+    val mContext: Context= view.context
+    @JvmField
     val mCheckbox: CheckBox = view.findViewById(R.id.debug_checked_text_view)
+
+    fun getItems(): DebugDataModel?{
+        return super.mItems
+    }
 
     override fun onItemSet() {
         mCheckbox.text = mItems?.text
@@ -89,8 +97,13 @@ class CheckBoxViewHolder(view: View): ViewHolder(view){
 class TextViewViewHolder(view: View): ViewHolder(view){
 
     @JvmField
+    val mContext: Context = view.context
+    @JvmField
     val mText: TextView = view.findViewById(R.id.text)
 
+    fun getItems(): DebugDataModel?{
+        return super.mItems
+    }
     override fun onItemSet() {
         mText.text = mItems?.text
     }
@@ -107,12 +120,18 @@ interface OnItemSelectListener {
 }
 class SpinnerViewHolder(view: View) : ViewHolder(view) {
     @JvmField
+    val mContext: Context = view.context
+    @JvmField
     val mText: TextView = view.findViewById(R.id.title)
     @JvmField
     val mSpinnerContainer: LinearLayout = view.findViewById(R.id.spinner_container)
     private val adapters = ArrayList<ArrayAdapter<String>>()
     private val items = ArrayList<List<String>>()
     private val spinners = ArrayList<Spinner>()
+
+    fun getItems(): DebugDataModel?{
+        return super.mItems
+    }
 
     fun clearSpinnerItems() {
         mSpinnerContainer.removeAllViews()
@@ -223,9 +242,7 @@ class SeparatorViewHolder(itemView: View) : ViewHolder(itemView) {
     }
 }
 
-open class DebugStandardAdapter(list:List<DebugDataModel>,context:Context?): RecyclerView.Adapter<ViewHolder>(){
-    @JvmField
-    val TAG = DebugStandardAdapter::class.java.simpleName
+class DebugStandardAdapter(list:List<DebugDataModel>,context:Context?): RecyclerView.Adapter<ViewHolder>(){
     @JvmField
     var mItems = list
     @JvmField
@@ -237,6 +254,9 @@ open class DebugStandardAdapter(list:List<DebugDataModel>,context:Context?): Rec
         return ViewHolder.newViewHolder(view,viewType)
     }
 
+    /**
+     * 这个方法就是在确定当前item对应的viewTypeIndex->对应onCreateViewHolder中的viewTypeIndex
+     */
     override fun getItemViewType(position: Int): Int {
         return mItems[position].viewType.ordinal
     }
@@ -259,38 +279,40 @@ open class DebugStandardAdapter(list:List<DebugDataModel>,context:Context?): Rec
         val item = mItems[position]
         holder.mItems = item
         when (item.viewType){
-            ViewType.EditText-> {
-                if (holder is EditTextViewHolder){
-                    bindEditTextViewHolder(holder, item)
-                }
-            }
             ViewType.CheckBox-> {
-                if (holder is CheckBoxViewHolder){
+                if (holder is CheckBoxViewHolder && item is DebugCheckBoxModel){
                     bindCheckBoxViewHolder(holder, item)
                 }
             }
+            ViewType.EditText-> {
+                if (holder is EditTextViewHolder && item is DebugEditTextModel){
+                    bindEditTextViewHolder(holder, item)
+                }
+            }
             ViewType.TextView-> {
-                if (holder is TextViewViewHolder){
+                if (holder is TextViewViewHolder && item is DebugTextViewModel){
                     bindTextViewViewHolder(holder, item)
                 }
             }
-            ViewType.Separator-> {
-                if (holder is SeparatorViewHolder){
-                    bindSeparatorViewHolder(holder, item)
-                }
-            }
             ViewType.Spinner-> {
-                if (holder is SpinnerViewHolder){
+                if (holder is SpinnerViewHolder && item is DebugSpinnerModel){
                     bindSpinnerViewHolder(holder, item)
                 }
             }
         }
     }
 
-    open fun bindEditTextViewHolder(holder: EditTextViewHolder,item: DebugDataModel){}
-    open fun bindCheckBoxViewHolder(holder: CheckBoxViewHolder,item: DebugDataModel){}
-    open fun bindTextViewViewHolder(holder: TextViewViewHolder,item: DebugDataModel){}
-    open fun bindSeparatorViewHolder(holder: SeparatorViewHolder,item: DebugDataModel){}
-    open fun bindSpinnerViewHolder(holder: SpinnerViewHolder,item: DebugDataModel){}
+    open fun bindEditTextViewHolder(holder: EditTextViewHolder,item: DebugEditTextModel){
+        item.realization.invoke(holder)
+    }
+    open fun bindCheckBoxViewHolder(holder: CheckBoxViewHolder,item: DebugCheckBoxModel){
+        item.realization.invoke(holder)
+    }
+    open fun bindTextViewViewHolder(holder: TextViewViewHolder,item: DebugTextViewModel){
+        item.realization.invoke(holder)
+    }
+    open fun bindSpinnerViewHolder(holder: SpinnerViewHolder,item: DebugSpinnerModel){
+        item.realization.invoke(holder)
+    }
 
 }

@@ -1,6 +1,7 @@
 package com.ss.android.application.app.debug
 
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -11,9 +12,9 @@ import com.bytedance.i18n.business.debug.R
 /**
  * 定义每个ViewPager的标准Fragment->含有一个RecyclerView
  */
-class DebugStandardFragment(adapter: DebugStandardAdapter): Fragment(){
+class DebugStandardFragment(list: List<DebugDataModel>): Fragment(){
 
-    private val mAdapter = adapter
+    private val mList = list
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         val mView = inflater.inflate(R.layout.debug_standard_fragment,container,false)
@@ -21,6 +22,8 @@ class DebugStandardFragment(adapter: DebugStandardAdapter): Fragment(){
 
         val layoutManager = LinearLayoutManager(activity)
         recyclerView?.layoutManager = layoutManager
+
+        val mAdapter = DebugStandardAdapter(mList,context)
 
         recyclerView?.adapter = mAdapter
         return mView

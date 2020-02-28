@@ -174,6 +174,7 @@ public class DebugAdapter extends RecyclerView.Adapter<DebugAdapter.ViewHolder> 
         USE_VOICE_SEARCH("Use Voice Search", ViewType.CheckBox),
         USE_UGC_PRELOAD("Use UGC Preload", ViewType.CheckBox),
         USE_DEFAULT_EFFECTS_CONFIG("Use default mv preload config(first check Use UGC Preload)", ViewType.CheckBox),
-        UGC_ENTRANCE_TYPE("UGC Entrance Type(-1,0,1,2)", ViewType.EditText),
+
+        ("UGC Entrance Type(-1,0,1,2)", ViewType.EditText),
         DebugGoogleMap("Debug with google map",ViewType.TextView),
         IMAGE_PRELOAD_DOWNLOAD_DURATION_THRESHOLD("Preload Original Image Threshold", ViewType.Spinner);
