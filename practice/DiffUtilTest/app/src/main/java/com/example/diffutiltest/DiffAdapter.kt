@@ -35,8 +35,8 @@ class DiffAdapter(mData:List<TestBean>): RecyclerView.Adapter<DiffAdapter.DiffVH
     }
 
     /**
-     * 与DiffCallBack中的getChangePayload搭配使用实现定向局部更新
-     */
+    * 与DiffCallBack中的getChangePayload搭配使用实现定向局部更新
+    */
     override fun onBindViewHolder(holder: DiffVH, position: Int, payloads: MutableList<Any>) {
         // payload不可能为null但可能为空，若为空则调用两个参数的onBindViewHolder做定向更新
         if (payloads.isEmpty()){
