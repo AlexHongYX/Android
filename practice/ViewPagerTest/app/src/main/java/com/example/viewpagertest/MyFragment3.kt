@@ -16,6 +16,8 @@ class MyFragment3: Fragment(){
         val view = inflater.inflate(R.layout.fg_content,container,false)
         val textView: TextView = view.findViewById(R.id.txt_content)
         textView.text = "第三个Fragment"
+        println("Fragment3")
+
         return view
     }
 }

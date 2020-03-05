@@ -12,6 +12,7 @@ import androidx.recyclerview.widget.RecyclerView
 
 /**
  * RecyclerView的适配器Adapter
+ *  Adapter的不同主要体现在：元素布局+绑定ViewHolder的不同
  */
 class FruitAdapter2(fruitList:List<Fruit>): RecyclerView.Adapter<FruitAdapter2.ViewHolder>(){
 

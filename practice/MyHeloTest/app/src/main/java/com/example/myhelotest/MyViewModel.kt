@@ -26,6 +26,13 @@ class MyViewModel: ViewModel(){
     }
 
     /**
+     * 外界通过setter方法对LiveData中的value进行修改
+     */
+    fun setFruitsLiveData(list:List<Fruit>){
+        fruitsLiveData?.value = list
+    }
+
+    /**
      * 加载初始化的水果集合
      */
     private fun loadFruits(){

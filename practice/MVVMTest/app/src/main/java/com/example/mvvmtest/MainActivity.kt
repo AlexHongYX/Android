@@ -1,6 +1,7 @@
 package com.example.mvvmtest
 
 import androidx.appcompat.app.AppCompatActivity
+
 import android.os.Bundle
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders

@@ -8,10 +8,10 @@ import androidx.fragment.app.FragmentPagerAdapter
 class MyFragmentPagerAdapter(fm:FragmentManager): FragmentPagerAdapter(fm){
 
     private val PAGER_COUNT = 4
-    private var myFragment1 = MyFragment1()
-    private var myFragment2 = MyFragment2()
-    private var myFragment3 = MyFragment3()
-    private var myFragment4 = MyFragment4()
+    private val myFragment1 = MyFragment1()
+    private val myFragment2 = MyFragment2()
+    private val myFragment3 = MyFragment3()
+    private val myFragment4 = MyFragment4()
 
 
     override fun instantiateItem(container: ViewGroup, position: Int): Any {
@@ -23,6 +23,7 @@ class MyFragmentPagerAdapter(fm:FragmentManager): FragmentPagerAdapter(fm){
     }
 
     override fun getItem(position: Int): Fragment? {
+        println("Adapter")
         var fragment: Fragment? = when(position){
             MainActivity.PAGE_ONE->
                 myFragment1
@@ -42,4 +43,7 @@ class MyFragmentPagerAdapter(fm:FragmentManager): FragmentPagerAdapter(fm){
         return PAGER_COUNT
     }
 
+    override fun getPageTitle(position: Int): CharSequence? {
+        return super.getPageTitle(position)
+    }
 }

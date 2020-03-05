@@ -37,11 +37,15 @@ class MainActivity : AppCompatActivity(),ViewPager.OnPageChangeListener {
         mAdapter = MyFragmentPagerAdapter(supportFragmentManager)
 
         bindViews()
+        // 默认选择rbChannel
         rbChannel?.isChecked = true
     }
 
+    /**
+     * 渲染界面/vs
+     */
     private fun bindViews() {
-        txtTopbar = findViewById(R.id.txt_topbar)
+//        txtTopbar = findViewById(R.id.txt_topbar)
         rgTabBar= findViewById(R.id.rg_tab_bar)
         rbChannel = findViewById(R.id.rb_channel)
         rbMessage = findViewById(R.id.rb_message)
@@ -51,6 +55,7 @@ class MainActivity : AppCompatActivity(),ViewPager.OnPageChangeListener {
         vpager = findViewById(R.id.vpager)
         // 设置适配器
         vpager?.adapter = mAdapter
+        // 设置初始位置
         vpager?.currentItem = 0
         vpager?.addOnPageChangeListener(this)
         // 设置选项
@@ -65,10 +70,10 @@ class MainActivity : AppCompatActivity(),ViewPager.OnPageChangeListener {
         }
     }
 
-    // 重写ViewPagery页面切换处理方法
+    // 重写ViewPager页面切换处理方法
     override fun onPageScrollStateChanged(state: Int) {
         //state的状态有三个，0表示什么都没做，1正在滑动，2滑动完毕
-        if (state === 2) {
+        if (state == 2) {
             when (vpager?.currentItem) {
                 PAGE_ONE -> rbChannel?.isChecked = true
                 PAGE_TWO -> rbMessage?.isChecked = true

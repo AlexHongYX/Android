@@ -12,18 +12,18 @@ import androidx.recyclerview.widget.RecyclerView
 /**
  * RecyclerView的适配器Adapter
  */
-class FruitAdapter(fruitList:List<Fruit>): RecyclerView.Adapter<FruitAdapter.ViewHolder>(){
+class FruitAdapter(): RecyclerView.Adapter<FruitAdapter.ViewHolder>(){
 
     /**
      * 声明内部类用于缓存View->之后直接操作ViewHolder即可，无需反复调用findXXX操作
      */
-    class ViewHolder(view:View):RecyclerView.ViewHolder(view){
-        val fruitImage:ImageView = view.findViewById(R.id.fruit_image)
-        val fruitName:TextView = view.findViewById(R.id.fruit_name)
-    }
+    class ViewHolder(view:View):RecyclerView.ViewHolder(view) {
+        val fruitImage: ImageView = view.findViewById(R.id.fruit_image)
+        val fruitName: TextView = view.findViewById(R.id.fruit_name)
 
+    }
     // 声明数据集合
-    var mFruitList:List<Fruit> = fruitList
+    var mFruitList:List<Fruit> = emptyList()
 
     /**
      * 创建holder实例，可以通过该方法直接操作View对象中的元素，比如点击
@@ -42,7 +42,7 @@ class FruitAdapter(fruitList:List<Fruit>): RecyclerView.Adapter<FruitAdapter.Vie
         }
         holder.fruitImage.setOnClickListener{
             val position:Int = holder.adapterPosition
-            val fruit:Fruit = mFruitList[position]
+            val fruit = mFruitList[position]
             Toast.makeText(it.context,"you clicked image "+fruit.name,Toast.LENGTH_SHORT).show()
         }
         return holder
@@ -59,7 +59,7 @@ class FruitAdapter(fruitList:List<Fruit>): RecyclerView.Adapter<FruitAdapter.Vie
      * 绑定当前元素
      */
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        val fruit:Fruit = mFruitList[position]
+        val fruit = mFruitList[position]
         // 通过ViewHolder渲染当前元素
         holder.fruitImage.setImageResource(fruit.imageId)
         holder.fruitName.text = fruit.name
@@ -74,8 +74,8 @@ class FruitAdapter(fruitList:List<Fruit>): RecyclerView.Adapter<FruitAdapter.Vie
         }else{
             val payload = payloads[0] as Bundle
             // 遍历payload进行局部更新
-            // 只能改名字
             holder.fruitName.text = payload.getString("KEY_NAME")
+            holder.fruitImage.setImageResource(payload.getInt("KEY_IMAGE"))
         }
     }
 }
