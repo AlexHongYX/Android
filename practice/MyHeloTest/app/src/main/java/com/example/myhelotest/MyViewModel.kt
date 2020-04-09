@@ -36,7 +36,7 @@ class MyViewModel: ViewModel(){
      * 加载初始化的水果集合
      */
     private fun loadFruits(){
-        val fruitList = initFruits()
+        val fruitList = initFruits()  
         fruitsLiveData?.value = fruitList
     }
 

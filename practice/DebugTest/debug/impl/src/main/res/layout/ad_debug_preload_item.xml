@@ -1,0 +1,40 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/item"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:paddingLeft="20dp"
+    android:paddingRight="20dp"
+    android:paddingTop="8dp"
+    android:paddingBottom="8dp"
+    android:clickable="true"
+    android:focusable="true"
+    android:foreground="?selectableItemBackground">
+
+    <com.ss.android.uilib.base.SSImageView
+        android:id="@+id/mark"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentRight="true"
+        android:layout_centerVertical="true"
+        android:src="@drawable/mark_ad_red"
+        android:scaleType="center" />
+
+    <com.ss.android.uilib.base.SSTextView
+        android:id="@+id/text_placement"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_toLeftOf="@+id/mark"
+        android:layout_gravity="center_vertical"
+        android:singleLine="true"
+        android:textAppearance="?android:attr/textAppearanceMedium" />
+
+    <com.ss.android.uilib.base.SSTextView
+        android:id="@+id/text_result"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="5dp"
+        android:layout_toLeftOf="@+id/mark"
+        android:layout_gravity="center_vertical"
+        android:layout_below="@+id/text_placement"
+        android:textAppearance="?android:attr/textAppearanceSmall" />
+</RelativeLayout>

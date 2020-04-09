@@ -12,7 +12,7 @@ class MainActivity : AppCompatActivity() {
         setContentView(R.layout.activity_main)
 
         // 初始化碎片为right_fragment
-        replaceFragment(RightFragment())
+//        replaceFragment(RightFragment())
 
         val button: Button = findViewById(R.id.button)
         button.setOnClickListener {
