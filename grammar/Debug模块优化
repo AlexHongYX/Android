@@ -1,0 +1,29 @@
+第一次优化
+√ 1.分包 
+√ 2.Fragment不能传参->DebugFragment也需要改进
+√ 3.Adapter再getitem中创建fragment
+√ 4.InitFragment命名问题
+√ 5.设置一个池子 包含所有已创建的fragment
+√ 6.将添加页面的一系列操作也抽象到一个类
+
+√ trouble:
+	每次添加都会多出来两个页面
+
+第二次优化
+√ 1.id由内部自己设定而不需要外部进行传递
+√ 2.CheckBox提出共性的地方
+√ 3.使用Claymore机制
+√ 4.找出其他类型提供共性的地方
+
+debug:
+	1.看一下添加的EditText和TextView有无问题
+		EditText->无误
+		TextView->
+	√ 2.改进一下那个Claymore接口，否则在查询的时候还是会addDepartment()->最后找到的不是一个对象
+		用hashCode做ListId不妥->如果最后能找到同一个对象的话，hashCode做ListId也可以
+		
+		改进方法:直接去掉DebugMessage类，用Claymore的hashCode做listID传入DebugStandardFragment，并在DebugStandardFragment中通过该listId与Claymore实现类的hashCode进行比较，得到对应实现类中的datalist
+
+Mudicadapter 棒德尔adapter
+
+

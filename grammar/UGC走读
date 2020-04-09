@@ -1,0 +1,62 @@
+UGC走读
+整个UGC的入口分为两种
+	老的->BuzzUgcEntranceActivity
+	新的->UgcPagerEntranceActivity
+
+老版本
+	Claymore机制
+		实现两个模块的分离，不需要将某一模块的所有东西都加载进来(避免强依赖)
+		每部分进行模块化，通过接口将模块的方法进行暴露
+		作用:通过传入的接口找到其实现类的对象，并调用其中的方法(通过Service->找到其Impl->创建Impl对象)
+		loadFirst/loadxxx->一个接口会有多个实现，如果只有一个实现那就直接调用loadFirst
+
+	BuzzUgcEntranceActivity中，
+		视图渲染:在initEntranceWithUgcType()中根据Ugc被打开的方式不同，将其渲染为不同的view(通过fab_container.addView(view))
+		点击事件:
+			①在渲染View之前通过setNormalEntranceListener(view)进行点击事件的显示，无论是哪种点击事件最终都会进入到buildOnClickListener()方法，并调用listener的一些方法
+			②而listener是BuzzPublishOnEntryClickListener类的一个实例，因此，在主界面的所有点击事件最终是被封装在BuzzPublishOnEntryClickListener这个类中进行实现
+
+	BuzzPublishOnEntryClickListener->	!!回头看一看live/temple是干什么用的
+		①在BuzzPublishOnEntryClickListener类中会根据不同的控件类型调用不同的点击事件 
+		②usePager:表示使用的不同的布局，如果是true，则使用新布局(底Tab)，如果是false，则使用老布局(多一层选择)
+		③根据业务的不同，text和poll直接进入发布页，而photo和video会进入编辑页
+			当usePager为true时，无论是text/poll/photo/video都会:
+				通过Claymore机制传入IUgcPagerEntrance接口并最终实例化该接口的实现类UgcPagerEntranceImpl的实例并通过start()启动，start()中实际上是UgcPagerEntranceActivity的启动。
+			当usePager为false时:
+				text/poll:通过Claymore机制传入UgcPostEditService接口并最终实例化该接口实现类UgcPostEditServiceImpl类(发布页)
+				photo/video:通过Claymore机制传入IUgcVEEntryABTester接口并最终实例化该接口的实现类UgcVEEntryABTesterImpl，而该类委托了UGCVEEntryABTester类，实际上返回的是UGCVEEntryABTester类的实例
+
+	UgcPagerEntranceActivity
+		该Activity使用的布局为activity_pager_entrance.xml，而该布局中只有UgcPagerEntranceFragment类，因此这个Activity只起过渡作用，实际上就是一个Activity中套了一个Fragment，主要的逻辑都在Fragment中
+	UgcPagerEntranceFragment
+		该类是真正底Tab布局所对应的类，查看该类的布局fragment_pager_entrance.xml中可发现，该xml文件中留有<FrameLayout>布局用以被其他Fragment填充，而底Tab创建Fragment的逻辑在UgcPagerEntranceAdapterImpl类中，在当前类使用adapter变量接收这个Fragment
+	UgcPagerEntranceAdapterImpl
+		该类对应每个底Tab上面的Fragment，根据底Tab的不同，分为两种
+			text/poll(VOTE)->进入发布页->Claymore机制最终进入UgcPostEditServiceImpl类(同usePager为true时的发布页)
+			photo/video->进入图片/视频选择页->Claymore机制最终进入BuzzMediaChooserLauncher类，调用createMediaChooserFragment()方法会返回一个
+				BuzzMediaChooserFragment对象(选图Fragment)->在BuzzMediaChooserLauncher类中会调用IMediaChooserNextStepStrategy来进行点击下一步的操作->无论是IMediaChooserNextStepStrategy的哪个实现(MvMediaChooserUtil/HeloUgcImageChooserFragment)都会通过Claymore机制调用
+				UgcPostOrEditABTesterServiceImpl类
+
+	UgcPostOrEditABTesterServiceImpl
+		该类会根据IMediaChooserNextStepStrategy的某个具体的实现类，判断此时点击next后是进入编辑页还是VE编辑页还是直接进入发布页
+		发布页->UgcPostEditService->最终到达UgcPostEditServiceImpl(同上的发布页)
+		VE编辑页->VeMakerServiceImpl->最终到达UgcVEEditActivity(编辑页)/UgcVERecordActivity(拍摄页)
+		无插件图片编辑页->UgcPicturesEditServiceImpl->最终到UgcPicturesEditActivity
+
+	UgcVEEditActivity编辑页(VE)
+		该类通过UgcVePanelManager获取UgcPanelFragment，并通过UgcVeEditPhotoFragment与SDK进行交互，完成图片的渲染，通过不同的类型，点击next后进入UgcPostEditServiceImpl发布页
+	UgcPicturesEditActivity编辑页(无插件图片编辑)
+		该类可对图片进行编辑，编辑完成后通过ClayMore机制传入IUgcEditNextStepStrategy接口，并通过loadAll()来加载两个实现类(UgcEditBackToPostStrategy<未编辑退回发布页>,UgcEditGoToPostStrategy<编辑完成进入发布页>)中相匹配的策略，一般使用的UgcEditGoToPostStrategy类
+	UgcEditGoToPostStrategy编辑完成进入发布页
+		该类通过ClayMore机制最终到达UgcPostEditServiceImpl进入发布页，并当修改投稿路径后，一旦从编辑页出去，编辑页就会被销毁
+			
+	UgcPostEditServiceImpl
+		该类通过ClayMore机制最终到达UgcPostEditActivity发布页，而UgcPostEditActivity会根据不同的发布方式调用不同的UgcXXXFragment
+
+
+
+
+
+
+
+
