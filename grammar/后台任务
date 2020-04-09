@@ -1,0 +1,7 @@
+后台任务
+	可延迟工作以及即使应用程序或设备重启也要执行的任务->使用WorkManager
+	在确切的时间运行的任务(必须在某个时间点执行)->使用AlarmManager
+	长时间运行的HTTP下载->使用DownloadManager
+
+Android多线程
+	Android不允许在子线程中进行UI操作

@@ -1,0 +1,67 @@
+碎片Fragment
+	碎片是一种可以嵌入在活动中的UI片段(可以理解为迷你型的活动)
+
+碎片的创建
+	1.创建一个碎片布局->xxx.xml
+	2.创建一个碎片类继承自Fragement并覆写其onCreateView()，return inflater.inflate(R.layout.fragment,container,flase)->实现碎片与其布局的绑定
+	3.在活动中通过fragment标签以引入对应布局->需要通过android:name指名要添加的碎片类名
+
+动态添加碎片
+	1.创建待添加的碎片实例->碎片的创建1和2步
+	2.活动中获取FragmentManager对象->直接调用supportFragmentManager
+	3.开启一个事务transaction->fragmentManager.beginTransaction()
+	4.想容器中添加/替换碎片->replace/add(容器的id,待添加碎片的实例)->ps:将活动的xml文件的某个布局(R.id.xxx)代替/添加fragment标签
+	5.提交事务->transaction.commit()
+
+Activity中管理碎片
+	supportFragmentManager.findFragmentById()
+	可以将对碎片的一系列操作放在一个事务中transaction，由Activity统一调用->Activity维护一个事务栈->只有使用addToBackStack才会入栈->必须commit
+
+碎片模拟返回栈
+	实现back键可以回到上一个碎片(默认是直接退出当前活动)
+
+碎片与活动之间的通信
+	活动中调用碎片->supportFragmentManager.findFragmentById()找到对应碎片
+	碎片中调用活动->activity直接获取与该碎片所绑定的活动
+	碎片向应用栏添加菜单
+
+碎片之间的通信
+	最好直接使用ViewModel即可(不同碎片间共享)
+
+
+碎片的生命周期
+	活动有的回调方法，碎片都有(多了与Activity的关联取关，Fragment视图的绘制销毁)
+	onAttach()->onCreate()->onCreateView()->onActivityCreated()->onStart()->onResume()->使用碎片ing->onPause()->onStop()->onDestroyView()
+		1.若使用了返回栈->上一个碎片被调用->onCreateView()->onActivityCreated()->onStart()->onResume()
+		2.若没使用返回栈->onDestroy()->onDetach()->碎片销毁
+	onAttach()->碎片与活动建立关联时调用
+	onCreateView()->碎片加载布局时调用
+	onActivityCreated()->与碎片相关联的活动已被创建完毕时调用
+	onDestroyView()->碎片的视图被移除时调用
+	onDetach()->碎片与活动解除关联时调用 
+
+动态加载布局的技巧
+	1.使用限定符实现不同设备的不同显示
+		在res包中新建layout-限定符(包)，并在该包下新建与layout包下相同的想要展示的xml布局文件
+		这就可以实现->在某种限定下(一般是屏幕大小)是一种布局(layout-限定符)，在其他情况下是另一种布局(layout中)
+		常见限定符:
+			大小:small,normal,large,xlarge
+			分辨率:ldpi,mdpi,hdpi,xhdpi,xxhdpi
+			方向:land(横屏),port(竖屏)
+	2.使用最小宽度限定符
+		若使用一般的限定符判断大小，分辨率采取的是官方默认的判定方式，若要自定义，则需要:
+			在res包中新建layout-sw600dp文件夹，在该文件夹新建xml布局文件
+		可实现若屏幕宽度大于等于600dp，则加载layout-sw600dp中的布局；若小于600dp，则加载layout中的布局
+
+注意:
+	Fragment的子类中属性名不能为view，Fragment中存在一个getView()用于返回该碎片的布局，若再将属性名命名为view，相当于是在覆写getValue()->kotlin的属性默认生成getter/setter
+
+拓展:
+	DialogFragment:浮动对话框
+	ListFragment:列表->在使用onCreateView()时默认返回一个ListView(recyclerView)
+
+
+
+
+
+

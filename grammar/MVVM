@@ -1,0 +1,54 @@
+无论是ViewModel还是LiveData
+	主要在说的就是MVVM模型->model-view-viewModel，数据-视图-viewModel分离
+
+ViewModel
+	Android框架可能会决定销毁或重新创建界面控制器，以响应完全不受您控制的某些用户操作或设备事件
+	ViewModel拥有视图数据的所有权(为界面准备数据)，在配置更改时(屏幕旋转)会自动保存数据，以便其他Activity或Fragment使用
+
+ViewModel生命周期:
+	ViewModel跟随Activity创建后就一直在内存中生存且工作，直到与其关联的Activity销毁destroy时，会触发onCleared(ViewModel的生命周期函数)宣布死亡
+	还依赖于Lifecycles通过对Activity生命周期的捕获来触发生命周期事件的上报来达到监控生命周期的目的	
+
+ViewModel好处:
+	开发者不需要担心Activity/Fragment的相关状态数据持久化的问题，避免缓存恢复数据(模板化的操作)
+
+LiveData
+	可观测的数据持有类，LiveData除了可以观测到其内部存储的数据的变化，还具有生命周期感知能力
+		->当其所持有的数据发生变化，且LifeCycle对象处于活跃状态/LifeCycle由非活跃变为活跃->LiveData通知观察者数据已经发生了变化->及时更新
+
+LiveData好处:
+	确保UI显示的是最新数据:数据发生改变，立即通知UI更新
+	避免内存泄漏(生命周期):Observers绑定在LifeCycle上，LifeCycle销毁自动清理
+	使用单例的LiveData:资源共享(多个LifeCycle)
+
+MVVM模型
+	1.LiveData的作用:使得数据具有LifeCycle生命周期的感知能力，当数据发生变化且LifeCycle处于活跃状态/LifeCycle由非活跃变为活跃时，会自动回调观察者中的回调方法(onChange())，对数据的变化进行实时监听
+	2.ViewModel的作用:当因系统配置发生改变导致Activity重建时(屏幕旋转),对LiveData进行正确的保存和恢复->仅此而已
+	3.MVVM模型一般是ViewModel中嵌套一个LiveData，ViewModel用于LiveData的保存，而LiveData真正保存数据，通过设置观察者响应数据变化
+
+MVVM使用
+	1.引入依赖->android.arch.lifecycle:extensions:1.1.1
+	2.创建自定义ViewModel->继承ViewModel，并在ViewModel中添加MytableLiveData属性用于存储数据(任意类型，List也可以)
+	3.对外提供获取该LiveData的getter->将返回值设置为LiveData->避免ViewModel外部对LiveData进行修改
+	4.外部通过ViewModelProviders.of(this).get(MyViewModel::class.java)->获取该ViewModel
+	5.通过viewModel.model.getUsersLiveData().observe(this, Observer {})->获取LiveData，并设置观察者响应LiveData的数据变化
+
+DiffUtil
+	1.作用:最大的作用就是在RecycleView刷新时，不再无脑mAdapter.notifyDataSetChanged()
+		mAdapter.notifyDataSetChanged()缺点不会触发RecyclerView动画，新老数据差别不大效率太低
+	2.只需要在更新RecyclerView时需要使用DiffUtil代替notifyDataSerChanged()->也就是这两者只是在更新时使用(监听更新)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

@@ -1,0 +1,33 @@
+Touch分发传递机制
+
+触摸手势:
+	手势都是存放在MotionEvent中的，手势的类型就主要有ACTION_DOWN、ACTION_MOVE、ACTION_UP...
+	MotionEventCompat:扩展MotionEvent类
+	GestureDetectorCompact:扩展GestureDetector类，主要是代替onTouchEvent()方法的->又是一层封装而已
+
+拖动与缩放:
+
+
+执行流程:
+	只有ACTION_DOWN是在寻找具体的控件(到底是在哪被消费)，其他的操作只是在依次走
+	ACTION_DOWN流程:	
+		Activity->ViewGroup->View
+		dispatchTouchEvent()<Activity>->dispatchTouchEvent()<ViewGroup>->onInterceptTouchEvent()<ViewGroup>->dispatchTouchEvent()<View>->onTouchEvent<View>->onTouchEvent()<ViewGroup>->ViewGroup<Activity>
+		1.对于dispatchTouchEvent()方法：
+			return true：消费掉事件，终止传递。
+			return false: 将事件传递给上一级View的onTouchEvent()方法。如果是Activity的dispatchTouchEvent()方法，则也是消费掉事件，终止传递。
+			return super:如果是Activity，则传给下一级view(viewGroup)的dispatchTouchEvent;如果是ViewGroup，则传给自己的onInterceptTouchEvent();如果是View,则传给自己的onTouchEvent().
+		2.对于onTouchEvent()方法：
+			return true:消费掉事件，终止传递。
+			return false/super:将事件传递给上一级view的onTouchEvent()方法。
+		3.对于onInterceptTouchEvent()方法：
+			return true:将事件传递给ViewGroup自己的onTouchEvent()方法处理。
+			return false/super:将事件传递给下一级View的dispatchTouchEvent()。
+	ACTION_MOVE和ACTION_CANCEL和ACTION_UP流程:
+		和ACTION_DOWN有关联
+		1.当ACTION_DOWN事件在dispatchTouchEvent()方法中被消费，则对应的ACTION_MOVE事件与ACTION_UP事件也会从上而下传递到该控件的该方法处被消费掉。
+		2.当ACTION_DOWN事件在onTouchEvent()方法中被消费，则对应的ACTION_MOVE事件与ACTION_UP事件只传递到该控件处的onTouchEvent()方法中然后被消费而终止传递。不会经历该控件之下的控件的传递过程。(并且不会传递到onInterceptTouchEvent()<ViewGroup的过滤器>)
+		3.当所有方法都默认return super,则ACTION_MOVE事件与ACTION_UP事件会在Activity的onTouchEvent()中被消费掉。
+	onInterceptTouchEvent()作用:
+		
+

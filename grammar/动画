@@ -1,0 +1,72 @@
+动画
+动画的分类:
+	1.视图动画
+		补间动画
+		逐帧动画
+	2.属性动画
+
+视图动画
+	作用对象:作用于View控件上，不可作用于控件的属性上(颜色，背景)
+	补间动画:
+		原理:确定开始的样式+结束的样式+中间动画的变化过程->由系统补全确定一个动画
+		分类:平移/缩放/旋转/透明度
+		特点:简单方便，系统已封装好效果，但无法控制属性
+		应用场景:视图中标准、基础的动画效果，Activity，Fragment的切换效果，视图组(ViewGroup)中子元素的出场效果
+	逐帧动画:
+		原理:每一帧是一张图片(较为复杂先不看)
+
+属性动画
+	产生原因:
+		视图动画只能作用在View上，有些情况只有其属性需要动画效果
+		**只改变View的视觉效果，不改变该View的属性->Button移动后点击无效
+		动画效果单一
+	作用对象:任意对象(不仅仅是View对象)
+	原理:在一定时间间隔中，不断对值进行改变，不断将该值赋给对象的属性(任意对象的任意属性)
+	特点:作用对象扩展，动画效果丰富
+
+两类动画的根本区别:
+	是否改变动画本身的属性
+	视图动画:仅对图像进行变换，无论动画在哪，该View的位置不变并且响应区域依旧在原地，老位置可以响应，新位置不行
+	属性动画:通过改变属性，从而使动画移动，新位置可以响应，老位置不行
+
+插值器和估值器
+	插值器:辅助动画实现的接口，设置属性值从初始值过渡到结束值的变化规律
+	估值器:辅助插值器的接口，设置属性从初始值过渡到结束值的变化具体数值
+
+补间动画
+	使用:就四种最基本的操作，调API即可
+	注意事项:使用组合动画时，若子动画设置了无限循环，则组合动画(AnimationSet)再设置循环方式及次数就无意义了
+	动画监听:
+		直接addListener(AnimatorListener())->必须实现所有四个方法(开始，重复，取消，结束)
+		借助动画适配器addListener(AnimatorListenerAdapter())->可以实现任意数量方法，更灵活
+	特殊应用场景:
+		Activity/Fragment切换
+			Activity:在使用startActivity后使用overridePendingTransition(进入下一个Activity时的动画,离开当前Activity时的动画)<可自定义>
+			Fragment:获取fragmentManager.beginTransaction()->获取fragmentTransaction
+				setTransition()设置系统动画，setCustomAnimations()设置自定义动画->与Activity相同
+		ViewGroup子元素出厂效果->常用语RecyclerView的item的出厂效果
+			1.构建animation/animationSet(xml/Java)->AnimationUtils.loadAnimation(id)加载元素出场动画
+			2.创建LayoutAnimationController对象，设置delay/order
+			3.recyclerView.setLayoutAnimation()设置属性
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

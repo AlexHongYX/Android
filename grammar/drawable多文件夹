@@ -1,0 +1,32 @@
+drawable对应屏幕密度
+	drawable-ldpi(低密度,~120dpi)
+	drawable-mdpi(中等密度,~160dpi) 
+	drawable-hdpi(高密度,~240dpi)
+	drawable-xhdpi(超高密度,~320dpi)
+	drawable-xxhdpi(超超高密度,~480dpi)
+	drawable-xxxhdpi(超超超高密度,~640dpi)
+	drawable-nohdpi(无缩放) 
+
+针对不同的屏幕密度，将图片放置在对应的drawable-[density]目录
+Android系统适配规则
+	1.先查找和屏幕密度最匹配的drawable-[density]目录
+	2.如果在最匹配的目录没有找到对应图片，就会向更高密度的目录查找，直到没有更高密度的目录
+	3.如果一直往高密度目录均没有查找，Android就会查找drawable-nodpi目录(不管当前屏幕的密度如何，系统都不会缩放此目录中的资源)
+	4.如果在drawable-nodpi目录也没有查找到，系统就会向比最匹配目录密度低的目录依次查找，直到没有更低密度的目录。
+
+图片的放大与缩小-依据当前设备的dpi对drawable-[density]目录中的图片进行缩放
+	1.如果图片所在目录为匹配目录(符合当前设备dpi的drawable目录)，则图片会根据设备dpi做适当的缩放调整。
+	2.如果图片所在目录dpi低于匹配目录，该图片本应是为低密度设备需要的，现在要显示在高密度设备上，图片会被放大。
+	3.如果图片所在目录dpi高于匹配目录，该图片本应是为高密度设备需要的，现在要显示在低密度设备上，图片会被缩小。
+	4.如果图片所在目录为drawable-nodpi，则无论设备dpi为多少，保留原图片大小，不进行缩放。
+
+	放大缩小倍数(以mdpi为基线)
+		ldpi:0.75
+		mdpi:1.0
+		hdpi:1.5
+		xhdpi:2.0
+		xxhdpi:3.0
+		xxxhdpi:4.0
+	图片实际的缩放因子(设备的dpi不一定都是通用密度的最大api时)
+		scale = 设备dpi/匹配目录对应的最大api
+		图片实际大小 = 图片原本大小 * scale

@@ -1,0 +1,22 @@
+通知
+	后台运行的应用程序向用户发出一些提示信息(状态栏会显示一个通知的图标)
+	一般在广播接收器/服务/活动中创建，在活动中创建的场景比较少(一般都是程序在后台运行时才会创建通知)
+
+创建通知步骤
+	0.引入com.android.support:support-compat:28.0.0依赖
+	1.通过连缀任意多的方法创建一个Notification对象，可以设置标题，正文，大小图标...->通过NotificationCompat.Builder(context,CHANNEL_ID)创建
+	2.创建NotificationManager对象->getSystemService(xx):参数用于确认获取系统的哪个服务
+	3.为兼容Android8.0(API 26+)创建通知渠道(createNotificationChannel())，在onCreate()中调用即可
+		标准的方法，channel_name和channel_description暂且都设置为app_name
+	4.响应通知的点击事件
+		①先构建Intent对象，表达出点击该通知的"意图"->目标活动
+		②构建PendingIntent对象(PendingIntent.getActivity(context,0,intent,0))->相当于创建在某个时机执行Intent动作
+		③在创建Notification对象(第1步)时添加setContentIntent(pendingIntent)->设置Notification的点击跳转动作
+	5.额外添加
+		setAutoCancel(true):一旦通知被点击(通知已被打开)，实现通知图标的自动消失
+		setSound(Uri):通知的声音(Uri是音频的Uri路径)
+		setVibrate({手机静止时长，手机振动时长，手机静止时长，手机振动时长}):通知的振动，需要声明权限(android.permission.VIBRATE)
+		setDefaults(NotificationCompat.DEFAULT_ALL):系统默认声音、振动等
+		setLights(颜色，灯亮时长，灯灭时长):锁屏时通知的LED灯显示
+		setStyle():允许构建富文本的通知内容(可多行/可图片)->用时查
+		setPriority():设置通知重要程度(PRORITY_MAX->立刻让用户看到，直接弹出来横幅并附带内容)

@@ -1,0 +1,82 @@
+服务
+	Android中实现程序后台运行的解决方案，适合于不需要和用户交互还要求长期运行的任务
+		不依赖于任何用户界面，即使程序被切换到后台，或用户打开了另外一个应用，服务仍能保持正常运行
+	服务依赖于创建服务的应用程序进程，当某个应用程序进程被杀掉时，所有依赖于该进程的服务都会停止运行
+		服务不会自动开启线程，需要在服务内部手动创建子线程(防止主线程被阻塞)
+
+异步消息处理机制
+	前提:Android不允许在子线程中进行UI操作
+	步骤:
+		1.在主线程中创建Handler对象并重写handleMessage()->注意:由于Handler类不符合SAM，因此必须使用匿名内部类的形式书写(object:类+override fun)
+		2.若子线程需要进行UI操作时，创建Message对象，并通过Handler的sendMessage()发送该Message
+		3.该Message会被添加到MessageQueue消息队列中，而Looper会一直尝试从MessageQueue中取待处理消息，并最终分发会Handler的handleMessage()->系统完成
+		4.handleMessage()在主线程中执行->进行UI操作
+	Android封装的AsyncTask也可以实现异步消息处理机制->用时看即可
+
+服务的机制:
+	服务适合执行不需要和用户交互而且还要求长期运行的任务，服务的运行不依赖于任何用户界面，即使程序被切换到后台，或者用户打开了另外一个应用程序，服务仍能保持正常运行，服务不是运行在一个独立的进程中，而是依赖于创建服务时所在的应用程序进程，当某个应用程序进程被杀掉时，所有依赖于该进程的服务也会停止运行。有的时候需要在服务内部手动创建子线程。
+
+服务的创建启动停止
+	创建:自定义类继承Service类并覆写onBind()方法-唯一的抽象方法
+		覆写onCreate()->创建时调用，onStartCommand()->每次服务启动时调用，onDestroy()->服务销毁时调用
+	注册:每个服务都需要在AndroidMainifest.xml中注册才能生效
+	启动:借助Intent显式实现，通过startService(intent)
+	停止:借助Intent显式实现，通过stopService(intent)
+
+服务与活动的绑定(因为一旦活动中start服务，服务和活动之间就没有任何关系了，因此若活动想要控制服务就得通过绑定)
+	步骤:
+		1.在服务中自定义内部类继承Binder类并添加自定义方法，并在服务类(MyService)的onBind()中返回该内部类对象
+		2.在活动中引入ServiceConnection实例->匿名内部类实现该类并覆写其onServiceDisconnected()和onServiceConnected()
+			并在onServiceConnected()向下转型参数(IBinder)为服务的内部类并调用其方法
+		3.通过bindService()和unbindService()实现服务的绑定与解绑
+	流程:
+		1.活动通过bindService()绑定服务，会新创建一个服务(服务的onCreate()会执行)
+		2.该服务会回调onBind()将其内部类(IBinder对象)返回给活动connection的onServiceConnected()作为参数
+		3.在该方法中对内部类进行操作->实现活动指挥服务完成功能
+	注意:
+		服务可以和该应用中的任何一个活动进行绑定，绑定完成后，不论什么活动获取到的是相同的Binder实例
+
+服务的生命周期
+	启动停止:任何位置startService()->查询服务是否被创建->未被创建就调用onCreate()->已被创建(每次启动)					
+			调用onStartCommand()->任何位置stopService()/stopSelf()->调用onDestroy()->服务销毁
+		ps:服务只会存在一个实例(即便调用很多次onStartCommand())，只需要stop()一次就会停止
+	绑定解绑:活动bindService()->回调Service中的onBind()->返回IBinder对象->实现活动与服务之间的通信->活动unbindService()->服务与活动解绑->没有活动与服			务绑定了->调用onDestroy()->服务销毁
+	混合使用:即启动又绑定->只有即停止又解绑->才会调用onDestroy()->服务销毁
+
+前台服务(类似于通知)
+	前提:服务基本都是在后台运行，当系统内存不足时，会回收掉正在后台运行的服务
+	前台服务:可以一直保持运行状态，不会由于系统内存不足的原因导致被回收
+		有一个正在运行的图标在系统状态栏中->类似于通知
+	实现:
+		1.在服务的onCreate()中创建一个通知(notification)
+		2.以startForeground(id<唯一标识>,notification)将该服务变为前台服务，并显示在状态栏中
+
+注意事项
+	1.服务默认会在应用的主线程中运行，如果服务执行的是密集型或阻止性操作，需要在服务内部创建新的线程
+	2.服务的启动停止与绑定解绑不是独立了，可搭配使用
+
+IntentService
+	前提:服务默认运行在主线程中，若在服务中处理耗时的任务，则容易出现ANR
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

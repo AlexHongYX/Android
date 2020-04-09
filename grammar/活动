@@ -1,5 +1,5 @@
 活动创建
-	活动是一种可以包含用户界面的组件，主要用于与用户进行交互
+	活动是一种可以包含用户界面的组件，主要用于与用户进行交互，一个活动基本上就是一个页面
 
 	唯一标识
 		在XML文件中定义一个id:@+id/id_name
@@ -11,6 +11,11 @@
 	布局引入
 		由于活动与布局是分离的，因此在活动中采用setContentView(布局的id)给当前活动加载一个布局(放在layout中)
 			R.layout.布局文件名
+		R文件相当于是一个映射的集合(各种资源与其标识符的映射)
+		对于文件层面，R相当于就是res文件夹(资源全在res中)，调用某个文件就是(R.文件夹名.文件名)
+		对于文件中的某个资源(Button/text)，使用id标识(设置id_name)，调用就是(R.id.id_name)
+
+		所有资源的id都在R文件的映射库中存放，因此注意id的唯一性
 
 	活动注册
 		Android的四大组件都需要在AndroidMainfest中进行注册，活动的注册声明要放在<application>标签内(通过<activity>标签)
@@ -22,11 +27,14 @@
 		在<activity>中添加一个属性(android:label)->设置标题栏(显示在活动最顶部)	
 		如果当前活动是主活动，改标题还会成为启动器中应用程序显示名称
 
-	R文件相当于是一个映射的集合(各种资源与其标识符的映射)
-		对于文件层面，R相当于就是res文件夹(资源全在res中)，调用某个文件就是(R.文件夹名.文件名)
-		对于文件中的某个资源(Button/text)，使用id标识(设置id_name)，调用就是(R.id.id_name)
+	任务与堆栈
+		任务就指代一个堆栈(一般每个应用程序是一个任务)，调用Activity，Activity的终止其实是堆栈的入栈出栈过程
+		多任务可以同时在后台运行，系统会保留任务中每个Activity的状态，若该任务恢复则会恢复栈顶的Activity
+		任务中的Activity默认是可以被多次实例化，可设置
+		长时间任务默认只会保留栈顶的Activity，可设置
 
-		所有资源的id都在R文件的映射库中存放，因此注意id的唯一性
+	进程的分类
+		https://developer.android.com/guide/components/activities/process-lifecycle
 
 创建一个活动：
 	1.创建一个布局
@@ -45,6 +53,8 @@
 销毁活动
 	在活动中调用finish()
 
+	显示Intent->在当前活动中
+	隐式Intent->跨应用
 *活动之间交互(Intent)
 	Intent:指名当前组件想要执行的动作/在不同组件之间传递数据
 		一般用于启动活动/服务，发送广播等场景
@@ -75,19 +85,36 @@
 		3.停止状态：不在栈顶且完全不可见(有可能会被回收)
 		4.销毁状态：从栈中移除(会被回收)
 	活动生存期
-		1.onCreate():第一次被创建时调用，用于初始化操作
+		1.onCreate():第一次被创建时调用，用于初始化操作->创建视图并将数据绑定到列表
 		2.onStart():活动每次由不可见变为可见时调用
-		3.onResume():活动准备好与用户进行交互时调用(活动位于栈顶且处于运行状态)
-		4.onPause():系统准备启动或恢复另一个活动时调用(释放CPU资源，保存关键数据)
-		5.onStop():活动完全不可见(完全被挡住看不见)时使用，若新活动是一个对话框式的活动会执行onPause()而不是onStop()
-		6.onDestroy():活动被销毁前调用，用于释放资源
+		3.onResume():活动准备好与用户进行交互时调用(活动位于栈顶且处于运行状态)->应用的大部分核心都在onResume()中完成
+		4.onPause():系统准备启动或恢复另一个活动时调用(释放CPU资源，保存关键数据)->部分可见或者是Activity不在前台
+			如果系统不在前台了->回调onPause()释放资源(不要释放UI资源<多窗口依旧部分可见>)保存关键简单数据->一直保持在暂停的状态
+				①->系统重新切回前台->onResume()初始化数据
+				②->系统完全不可见->onStop()
+		5.onStop():活动完全不可见(完全被挡住看不见)时使用->应用应释放或调整应用对用户不可见时的无用资源
+			①->返回于用户交互->onRestart()
+			②->结束运行->onDestroy()
+		6.onDestroy():活动被销毁前调用，用于释放资源->设备的变更(屏幕的旋转)会导致销毁->配合ViewModel使用
 		7.onRestart():活动由停止状态->运行状态前调用，活动被重新启动
 		两两相对的生存期
 			完整生存期：onCreate()->onDestroy()，初始化/销毁操作
 			可见生存期：onStart()->onStop()，管理可见资源
 			前台生存期：onResume()->onPause()，活动与用户进行交互
 		8.onSaveInstanceState():若活动在停止状态时被系统回收了，携带一个Bundle类型的参数(该类型提供参数保存数据)保存了临时代码
+				默认实现保存有关 Activity 视图层次结构状态的瞬态信息，例如 EditText 微件中的文本或 ListView 微件的滚动位置。可以自定义。
 			数据恢复：在onCreate()中本身就有一个Bundle对象(类似于Intent的操作->就是key-value的格式)
+			ps:当用户显式关闭Activity时(按返回键退出)，或者在其他情况下调用 finish() 时，系统不会调用 onSaveInstanceState()。
+		不可见->可见->准备交互->暂停->完全停止->销毁
+
+活动状态更改
+	配置发生变化:使用ViewModel
+	多窗口:老onPause(),新onResume()
+	对话框:
+		局部覆盖->onPause()->重返前台->onResume()
+		完全覆盖->onPause()+onStop()->重返前台->onRestart()->onStart()->onResume()
+	点击返回按钮退出活动:
+		活动直接被销毁->onPause()+onStop()+onDestroy()
 
 活动的启动模式
 	四种启动模式：standard,singleTop,singleTask,singleInstance。
@@ -102,6 +129,9 @@
 
 技巧
 	知晓当前在哪一个活动:设置一个所有Activity的公共父类(该类继承了AppCompatActivity，其他类继承该父类就行)
+
+Activity和进程间的通信
+	Parcelable和Bundle
 
 
 

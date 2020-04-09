@@ -93,8 +93,8 @@ ListView(只支持纵向滚动)
 
 RecyclerView(纵向、横向、瀑布流滚动)——推荐使用
 	实现步骤：
-		1.添加RecyclerView依赖
-		2.在xml文件中添加RecyclerView控件
+		1.添加RecyclerView依赖->androidx.recyclerview:recyclerview:1.0.0
+		2.在xml文件中添加RecyclerView控件-><androidx.recyclerview.widget.RecyclerView/>标签
 		3.创建RecyclerView的Adapter(自定义适配器)
 			①创建RecyclerView.Adapter类的子类(自定义适配器)，泛型传入RecyclerView.ViewHolder类
 			②创建RecyclerView.ViewHolder类的子类(当前适配器的内部类)
@@ -109,6 +109,13 @@ RecyclerView(纵向、横向、瀑布流滚动)——推荐使用
 		不注册子项的点击事件(点击事件可能是子项里具体的某一个按钮)，所有的点击事件都是由具体的View去注册(在View中注册点击事件)
 			在ViewHolder中添加当前View属性，可以通过ViewHolder操作当前View设置对应的点击事件
 		RecyclerView实现了子项中任意控件(子项整体)或布局的点击事件(也就是说:点击事件是基于View的整体或部分的，RecyclerView只需要引用View即可->实现简单，逻辑清晰)
+
+ViewPager
+	页面允许左右滑动的布局管理器，不同页面带有不同的数据。
+
+TabLayout
+	
+
 
 
 
